@@ -1,0 +1,57 @@
+{
+  "name": "poll-horse",
+  "version": "0.1.0",
+  "description": "Make polls to vote on easily",
+  "main": "dist/main.js",
+  "types": "dist/main.d.ts",
+  "scripts": {
+    "find-todo": "node utils/todo-finder.js .",
+    "mocha": "mocha",
+    "lint": "eslint .",
+    "build": "rimraf ./dist && tsc",
+    "test": "npm run lint && npm run find-todo && npm run mocha",
+    "start": "npm test && npm run build && node ./dist/main.js",
+    "prepublish": "npm test && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://Wolvan@github.com/Wolvan/poll.horse.git"
+  },
+  "keywords": [
+    "voting",
+    "polls",
+    "democracy"
+  ],
+  "author": "Wolvan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Wolvan/poll.horse/issues"
+  },
+  "files": [
+    "/dist"
+  ],
+  "homepage": "https://github.com/Wolvan/poll.horse#readme",
+  "devDependencies": {
+    "@types/chai": "^4.2.22",
+    "@types/chai-as-promised": "^7.1.4",
+    "@types/fs-extra": "^9.0.13",
+    "@types/mocha": "^9.0.0",
+    "@types/node": "^16.11.10",
+    "@typescript-eslint/eslint-plugin": "^5.4.0",
+    "@typescript-eslint/parser": "^5.4.0",
+    "chai": "^4.3.4",
+    "chai-as-promised": "^7.1.1",
+    "eslint": "^8.3.0",
+    "eslint-plugin-chai-expect": "^3.0.0",
+    "eslint-plugin-mocha": "^9.0.0",
+    "fs-extra": "^10.0.0",
+    "klaw": "^4.0.1",
+    "mocha": "^9.1.3",
+    "rimraf": "^3.0.2",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.5.2"
+  },
+  "dependencies": {
+    "commander": "^8.3.0"
+  }
+}
