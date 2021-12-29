@@ -17,7 +17,7 @@ type Poll = {
     creationTime: Date,
 };
 
-function randomString(length = 10, charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789") {
+function randomString(length = 10, charset = "abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789") {
     let result = "";
     for (let i = 0; i < length; i++) {
         result += charset.charAt(Math.floor(Math.random() * charset.length));
@@ -76,7 +76,7 @@ export default async function init(router: Router): Promise<void> {
             const options = req.body.options;
             if (!Array.isArray(options) || options.filter(i => i).length < 2)
                 return res.status(400).json({ error: "Options must be an array and have at least 2 entries" });
-            let id = randomString(6);
+            let id = randomString(8);
             while (await polls.getItem(id)) id = randomString(6);
             await polls.setItem(id, {});
             const dupeCheckMode = ["none", "ip", "cookie"].includes(req.body.dupeCheckMode) ? req.body.dupeCheckMode : "ip";
