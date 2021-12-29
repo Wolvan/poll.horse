@@ -75,10 +75,10 @@ export default async function init(router: Router): Promise<void> {
                 dupeCheckMode === "cookie" ? randomString(16) : null;
             const poll: Poll = {
                 id,
-                title: req.body.title || "",
+                title: (req.body.title || "").trim().slice(0, 300),
                 options: (() => {
                     const result: { [option: string]: number } = {};
-                    for (const option of options) {
+                    for (const option of options.map(i => i.trim().slice(0, 300))) {
                         if (option) result[option] = 0;
                     }
                     return result;
