@@ -8,13 +8,6 @@ import replaceArguments from "./config-handlers";
 
 type CommanderOption = [flags: string, description: string, defaultValueOrHandler?: (((...args:any[]) => any) | any), defaultValue?: any];
 
-const configCommander = new Command();
-configCommander
-    .allowUnknownOption()
-    .option("-c, --config-path <path>", "Path to the configuration file to load", "../config")
-    .option("-h, --help", "Don't. Just don't.")
-    .parse(process.argv);
-
 async function loadPackageJSONVersion(): Promise<string> {
     try {
         const packageJSON = await fs.readFile(resolve(__dirname, "../package.json"), "utf8");
@@ -27,11 +20,21 @@ async function loadPackageJSONVersion(): Promise<string> {
     }
 }
 async function loadConfig(options: CommanderOption[] = [], homedirConfigFilename: (string | null) = null): Promise<void> {
+    const version = await loadPackageJSONVersion();
+    
+    const configCommander = new Command();
+    configCommander
+        .allowUnknownOption()
+        .version(version)
+        .option("-c, --config-path <path>", "Path to the configuration file to load", "./config")
+        .option("-h, --help", "Don't. Just don't.")
+        .parse(process.argv);
+
     const config = await (async () => {
         try {
             const opts = configCommander.opts();
-            const config = await import(opts.configPath || "../config");
-            console.log(`Loaded config from ${opts.configPath || "../config"}`);
+            const config = await import(resolve(opts.configPath || "./config"));
+            console.log(`Loaded config from ${opts.configPath || "./config"}`);
             return config;
         } catch (error) {
             try {
@@ -41,8 +44,8 @@ async function loadConfig(options: CommanderOption[] = [], homedirConfigFilename
                 return config;
             } catch (error) {
                 try {
-                    const config = await import(resolve(__dirname, "config"));
-                    console.log(`Loaded config from ${resolve(__dirname, "config")}`);
+                    const config = await import(resolve(__dirname, "..", "config"));
+                    console.log(`Loaded config from ${resolve(__dirname, "..", "config")}`);
                     return config;
                 } catch (error) {
                     return {};
@@ -50,7 +53,6 @@ async function loadConfig(options: CommanderOption[] = [], homedirConfigFilename
             }
         }
     })();
-    const version = await loadPackageJSONVersion();
 
     program
         .version(version)

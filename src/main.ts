@@ -11,7 +11,7 @@ async function main(): Promise<void> {
     await loadConfig([
         ["--no-frontend", "Do not start the frontend server"],
         ["--no-backend", "Do not start the backend server"],
-        ["-d, --data-directory <path>", "Path to the data directory", "../data"],
+        ["-d, --data-directory <path>", "Path to the data directory", "./data"],
         ["-p, --port <port>", "Port to listen on", (port: any) => parseInt(port), 6969],
         ["--backend-base-url <url>", "Base URL for the backend server", null],
     ], ".poll-horse-config");

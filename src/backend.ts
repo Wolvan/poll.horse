@@ -3,6 +3,7 @@
 import { Router } from "express";
 import persist from "node-persist";
 import { program } from "commander";
+import { resolve } from "path";
 
 type Poll = {
     id: string,
@@ -27,7 +28,7 @@ function randomString(length = 10, charset = "abcdefghjkmnpqrstuvwxyzABCDEFGHJKL
 
 export default async function init(router: Router): Promise<void> {
     const polls = await persist.create({
-        dir: program.opts().dataDirectory
+        dir: resolve(process.cwd(), program.opts().dataDirectory)
     });
     await polls.init();
     
