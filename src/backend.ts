@@ -79,7 +79,7 @@ export default async function init(router: Router): Promise<void> {
             let id = randomString(8);
             while (await polls.getItem(id)) id = randomString(6);
             await polls.setItem(id, {});
-            const dupeCheckMode = ["none", "ip", "cookie"].includes(req.body.dupeCheckMode) ? req.body.dupeCheckMode : "ip";
+            const dupeCheckMode = ["none", "ip", "cookie"].includes((req.body.dupeCheckMode || "").toLowerCase()) ? (req.body.dupeCheckMode || "").toLowerCase() : "ip";
             const dupeData =
                 dupeCheckMode === "none" ? null :
                 dupeCheckMode === "ip" ? [] :
