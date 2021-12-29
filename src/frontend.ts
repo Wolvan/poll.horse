@@ -3,6 +3,9 @@ import fs from "fs-extra";
 import { resolve } from "path";
 import { Transform as TransformStream, Stream } from "stream";
 import { Router, Request, Response } from "express";
+import fetch from 'node-fetch';
+import { program } from "commander";
+import { FrontendPoll as Poll, PollResult } from "./Poll";
 
 const RenderBuffer = new WeakMap();
 const RenderReplacements = new WeakMap();
@@ -91,11 +94,37 @@ async function displayPage(req: Request, res: Response, htmlFilename: string, re
 export default function init(router: Router): void {
     router.get("/:id/r", async (req, res) => {
         const id = req.params.id;
-        res.redirect(`/`);
+        try {
+            const poll: PollResult = await fetch(
+                (program.opts().backendBaseUrl || "http://localhost:" + program.opts().port) + "/_backend/poll-result/" + id
+            ).then(r => r.json()) as PollResult;
+            if (!poll || poll.error) return res.redirect("/");
+            await displayPage(req, res, "result.html", {
+                "POLL_ID": id,
+                "POLL_TITLE": poll.title,
+                
+            });
+        } catch (error) {
+            console.log(error);
+            res.redirect(`/`);
+        }
     });
     router.get("/:id", async (req, res) => {
         const id = req.params.id;
-        res.redirect(`/`);
+        try {
+            const poll: Poll = await fetch(
+                (program.opts().backendBaseUrl || "http://localhost:" + program.opts().port) + "/_backend/poll/" + id
+            ).then(r => r.json()) as Poll;
+            if (!poll || poll.error) return res.redirect("/");
+            await displayPage(req, res, "poll.html", {
+                "POLL_ID": id,
+                "POLL_TITLE": poll.title,
+                
+            });
+        } catch (error) {
+            console.log(error);
+            res.redirect(`/`);
+        }
     });
     router.get("/", (req, res) => displayPage(req, res, "index.html"));
 }

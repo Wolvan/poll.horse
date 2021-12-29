@@ -4,19 +4,7 @@ import { Router } from "express";
 import persist from "node-persist";
 import { program } from "commander";
 import { resolve } from "path";
-
-type Poll = {
-    id: string,
-    title: string,
-    options: {
-        [option: string]: number
-    },
-    dupeCheckMode: "none" | "ip" | "cookie",
-    dupeData: null | string[] | string,
-    multiSelect: boolean,
-    captcha: boolean,
-    creationTime: Date,
-};
+import { BackendPoll as Poll } from "./Poll";
 
 function randomString(length = 10, charset = "abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789") {
     let result = "";
