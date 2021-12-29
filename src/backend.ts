@@ -90,7 +90,7 @@ export default async function init(router: Router): Promise<void> {
                 options: (() => {
                     const result: { [option: string]: number } = {};
                     for (const option of options) {
-                        result[option] = 0;
+                        if (option) result[option] = 0;
                     }
                     return result;
                 })(),
