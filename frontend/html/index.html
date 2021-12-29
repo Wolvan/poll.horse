@@ -18,9 +18,9 @@
         <section class="notepad">
             <div class="notepad-border"></div>
             <section class="poll-title">
-                <input type="text" maxlength="300" placeholder="Enter your question here">
+                <input id="poll-title" type="text" maxlength="300" placeholder="Enter your question here">
             </section>
-            <section class="poll-options">
+            <section id="poll-options" class="poll-options">
                 <div class="poll-option">
                     <input type="text" maxlength="300" placeholder="Enter your option here">
                 </div>
@@ -31,7 +31,20 @@
                     <input type="text" maxlength="300" placeholder="Enter your option here">
                 </div>
             </section>
-            <section class="poll-footer"></section>
+            <section class="poll-footer">
+                <select id="dupe-check">
+                    <option value="ip" selected>IP-based duplication checking</option>
+                    <option value="cookie">Cookie-based duplication checking</option>
+                    <option value="none">No duplication checking</option>
+                </select>
+                <br>
+                <label>
+                    <input type="checkbox" id="multiple">
+                    <span>Allow multiple answers to be selected</span>
+                </label>
+                <br>
+                <button id="create-poll">Create poll</button>
+            </section>
         </section>
     </main>
     <footer>

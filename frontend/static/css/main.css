@@ -66,6 +66,9 @@ main .notepad .poll-option {
 }
 main .notepad .poll-footer {
     height: 180px;
+    padding: 10px;
+    padding-bottom: 0;
+    font-family: Arial, sans-serif;
 }
 main .notepad .poll-title,
 main .notepad .poll-option,
@@ -84,7 +87,34 @@ main .notepad-border {
     border-right: 2px solid red;
 }
 /* #endregion notepad */
+/* #region notepad-footer */
+main .notepad .poll-footer button {
+    padding: 0 30px;
+    height: 50px;
+    border-radius: 10px;
+    border: none;
+    background-color: #a8a8a8;
+    cursor: pointer;
+    font-size: 1.25em;
+    transition: background-color 0.2s;
+    color: #fff;
+    margin-right: 5px;
+}
+main .notepad .poll-footer button:hover {
+    background-color: #b6b6b6;
+}
 
+#create-poll {
+    background-color: #cf2828;
+}
+#create-poll:hover {
+    background-color: #e94747;
+}
+main .notepad .poll-footer input[type="checkbox"] {
+    margin: 10px 0;
+    margin-right: 5px;
+}
+/* #endregion notepad-footer */
 /* #endregion Main */
 /* #region Footer */
 footer {
