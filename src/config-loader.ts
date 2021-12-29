@@ -58,10 +58,7 @@ async function loadConfig(options: CommanderOption[] = [], homedirConfigFilename
         .version(version)
         .option("-c, --config-path <path>", "Path to the configuration file to load", "./config");
     options.forEach(([name, description, handler, defaultValue]) => program.option(name, description, handler, defaultValue));
-
-    Object.keys(program.opts()).forEach(option => {
-        if (config[option]) program.opts()[option] = config[option];
-    });
+    Object.keys(config).forEach(option => program.setOptionValueWithSource(option, config[option], "config"));
 
     program.parse(process.argv);
 

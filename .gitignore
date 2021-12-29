@@ -113,3 +113,7 @@ testing/
 *.db3
 # Data directory
 data/
+
+# Config files
+config*.js*
+!config.example.json
