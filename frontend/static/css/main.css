@@ -1,3 +1,115 @@
-h1 {
-    color: red;
+* {
+    margin: 0;
+    padding: 0;
 }
+
+body {
+    width: 100vw;
+    height: 100vh;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    background-color: #323232;
+    font-family: 'Caveat', cursive;
+}
+
+input[type="text"] {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background-color: transparent;
+    color: #323232;
+    font-size: 1.5em;
+    outline: none;
+    font-family: 'Caveat', cursive;
+}
+
+/* #region Header */
+header {
+    width: 100%;
+    height: 60px;
+    text-align: center;
+    color: #fff;
+}
+header h1 {
+    font-size: 3em;
+}
+/* #endregion Header */
+
+/* #region Main */
+main {
+    min-height: calc(100% - 60px - 120px - 60px);
+    position: relative;
+    padding-bottom: 120px;
+}
+/* #region notepad */
+main .notepad {
+    position: relative;
+    top: 60px;
+    width: 40%;
+    background-color: #ffd756;
+    margin-left: auto;
+    margin-right: auto;
+}
+main .notepad .poll-title {
+    height: 70px;
+}
+main .notepad .poll-title input {
+    font-size: 2em;
+    font-weight: bold;
+}
+main .notepad .poll-option {
+    height: 50px;
+}
+main .notepad .poll-title,
+main .notepad .poll-option {
+    border-bottom: 2px solid #b1b874;
+}
+main .notepad .poll-footer {
+    height: 180px;
+}
+main .notepad .poll-title,
+main .notepad .poll-option,
+main .notepad .poll-footer {
+    padding-left: 10%;
+    padding-right: 5px;
+    width: calc(90% - 5px);
+}
+
+main .notepad-border {
+    position: absolute;
+    left: 5%;
+    height: 100%;
+    width: 5px;
+    border-left: 2px solid red;
+    border-right: 2px solid red;
+}
+/* #endregion notepad */
+
+/* #endregion Main */
+/* #region Footer */
+footer {
+    background-color: #292929;
+    width: 100%;
+    height: 60px;
+    font-family: Arial, sans-serif;
+}
+footer ul {
+    text-align: center;
+    list-style-type: none;
+}
+footer ul li {
+    display: inline-block;
+    padding: 10px;
+}
+footer ul li a {
+    color: #a9a9a9;
+    text-decoration: none;
+}
+footer ul li a:hover {
+    color: #c3c3c3;
+}
+footer .copyright {
+    text-align: center;
+    color: #fff;
+}
+/* #endregion Footer */
