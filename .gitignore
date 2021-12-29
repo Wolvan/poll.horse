@@ -111,3 +111,5 @@ testing/
 *.sqlite3
 *.db
 *.db3
+# Data directory
+data/

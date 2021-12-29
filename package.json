@@ -35,10 +35,12 @@
     "@types/chai": "^4.2.22",
     "@types/chai-as-promised": "^7.1.4",
     "@types/compression": "^1.7.2",
+    "@types/cookie-parser": "^1.4.2",
     "@types/express": "^4.17.13",
     "@types/fs-extra": "^9.0.13",
     "@types/mocha": "^9.0.0",
     "@types/node": "^16.11.10",
+    "@types/node-persist": "^3.1.2",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "@typescript-eslint/parser": "^5.4.0",
     "chai": "^4.3.4",
@@ -56,6 +58,8 @@
   "dependencies": {
     "commander": "^8.3.0",
     "compression": "^1.7.4",
-    "express": "^4.17.2"
+    "cookie-parser": "^1.4.6",
+    "express": "^4.17.2",
+    "node-persist": "^3.1.0"
   }
 }
