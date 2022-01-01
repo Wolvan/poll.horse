@@ -8,6 +8,11 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/main.css">
+    <script type="text/javascript">
+        const MAX_POLL_OPTIONS = "{{ MAX_POLL_OPTIONS }}";
+        const MAX_CHARACTER_LENGTH = "{{ MAX_CHARACTER_LENGTH }}";
+    </script>
+    <script type="text/javascript" src="/static/js/index.js" defer="true" async="true"></script>
 </head>
 <body>
     <header>
@@ -22,7 +27,7 @@
             <div class="notepad-border"></div>
             <form action="{{ BACKEND_BASE_PATH }}/_backend/poll-form" method="POST">
                 <section class="poll-title">
-                    <input id="poll-title" name="poll-title" type="text" maxlength="300" placeholder="Enter your question here" value="{{ FORM_TITLE }}">
+                    <input id="poll-title" name="poll-title" type="text" maxlength="{{ MAX_CHARACTER_LENGTH }}" placeholder="Enter your question here" value="{{ FORM_TITLE }}">
                 </section>
                 <section id="poll-options" class="poll-options">
                     {{ FORM_OPTION_DIVS }}

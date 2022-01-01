@@ -4,5 +4,9 @@
         "commonjs": false,
         "es6": true,
         "node": false
+    },
+    "globals": {
+        "MAX_POLL_OPTIONS": "readonly",
+        "MAX_CHARACTER_LENGTH": "readonly"
     }
 }

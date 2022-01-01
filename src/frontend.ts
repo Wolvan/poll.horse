@@ -6,6 +6,7 @@ import { Router, Request, Response } from "express";
 import fetch from 'node-fetch';
 import { program } from "commander";
 import { FrontendPoll as Poll, PollResult } from "./Poll";
+import { MAX_CHARACTER_LENGTH, MAX_POLL_OPTIONS } from "./Config";
 
 const RenderBuffer = new WeakMap();
 const RenderReplacements = new WeakMap();
@@ -134,7 +135,7 @@ export default function init(router: Router): void {
             .slice(0, 3);
         const pollOptionDivs = options.map(option => `
             <div class="poll-option">
-                <input type="text" name="poll-option" maxlength="300" placeholder="Enter your option here" value="${option}">
+                <input type="text" name="poll-option" maxlength="${MAX_CHARACTER_LENGTH}" placeholder="Enter your option here" value="${option}">
             </div>
         `).join("");
 
@@ -148,7 +149,9 @@ export default function init(router: Router): void {
             "FORM_DUPECHECK_NONE": req.query.dupecheck === "none" ? "selected" : "",
             "FORM_MULTI_SELECT": req.query.multiselect === "true" ? "checked" : "",  
             "FORM_CAPTCHA": req.query.captcha === "true" ? "checked" : "",
-            "FORM_OPTION_DIVS": pollOptionDivs
+            "FORM_OPTION_DIVS": pollOptionDivs,
+            "MAX_POLL_OPTIONS": MAX_POLL_OPTIONS,
+            "MAX_CHARACTER_LENGTH": MAX_CHARACTER_LENGTH
         });
     });
 }

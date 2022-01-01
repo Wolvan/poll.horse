@@ -5,6 +5,7 @@ import persist from "node-persist";
 import { program } from "commander";
 import { resolve } from "path";
 import { BackendPoll as Poll, DupeCheckMode } from "./Poll";
+import { MAX_POLL_OPTIONS, MAX_CHARACTER_LENGTH } from "./Config";
 
 function randomString(length = 10, charset = "abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789") {
     let result = "";
@@ -69,6 +70,8 @@ export default async function init(router: Router): Promise<void> {
     }): Promise<Poll | string> {
         if (!Array.isArray(pollData.options) || pollData.options.filter(i => i).length < 2)
             return "Options must be an array and have at least 2 entries";
+        if (pollData.options.filter(i => i).length > MAX_POLL_OPTIONS)
+            return "Only " + MAX_POLL_OPTIONS + " options are allowed";
 
         let id = randomString(8);
         while (await polls.getItem(id)) id = randomString(6);
@@ -84,10 +87,10 @@ export default async function init(router: Router): Promise<void> {
             dupeCheckMode === "cookie" ? randomString(16) : null;
         const poll: Poll = {
             id,
-            title: (pollData.title || "").trim().slice(0, 300),
+            title: (pollData.title || "").trim().slice(0, MAX_CHARACTER_LENGTH),
             options: (() => {
                 const result: { [option: string]: number } = {};
-                for (const option of pollData.options.map(i => i.trim().slice(0, 300))) {
+                for (const option of pollData.options.map(i => i.trim().slice(0, MAX_CHARACTER_LENGTH))) {
                     if (option) result[option] = 0;
                 }
                 return result;
@@ -105,7 +108,7 @@ export default async function init(router: Router): Promise<void> {
     router.post("/poll", async (req, res) => {
         try {
             const poll = await createPoll({
-                title: (req.body.title || "").trim().slice(0, 300),
+                title: (req.body.title || "").trim().slice(0, MAX_CHARACTER_LENGTH),
                 options: req.body.options,
                 dupeCheckMode: req.body.dupeCheckMode,
                 multiSelect: req.body.multiSelect || false,
@@ -130,7 +133,7 @@ export default async function init(router: Router): Promise<void> {
     router.post("/poll-form", async (req, res) => {
         try {
             const poll = await createPoll({
-                title: (req.body["poll-title"] || "").trim().slice(0, 300),
+                title: (req.body["poll-title"] || "").trim().slice(0, MAX_CHARACTER_LENGTH),
                 options: req.body["poll-option"],
                 dupeCheckMode: req.body["dupe-check"],
                 multiSelect: req.body["multi-select"] === "on",
@@ -142,7 +145,7 @@ export default async function init(router: Router): Promise<void> {
             }&title=${
                 encodeURIComponent(req.body["poll-title"])
             }&options=${
-                encodeURIComponent((req.body["poll-option"] || []).join("\uFFFE"))
+                encodeURIComponent((req.body["poll-option"] || []).slice(0, MAX_POLL_OPTIONS).join("\uFFFE"))
             }&dupecheck=${
                 encodeURIComponent(req.body["dupe-check"])
             }&multiselect=${
