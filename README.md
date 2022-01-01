@@ -29,4 +29,5 @@ Execute the scripts with `npm run <script>`
 - `lint` - Runs `eslint` and checks for code styling problems
 - `build` - Compile the TypeScript Source to `dist/`
 - `test` - Runs `lint`, `find-todo` and `mocha` in order
+- `debug` - Start the `./src/main.ts` with node and start the debugger on port 9229
 - `start` - Run `test` and `build`, then try and execute the `./dist/main.js` in the `./dist` directory to test

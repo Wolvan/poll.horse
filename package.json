@@ -10,6 +10,7 @@
     "lint": "eslint .",
     "build": "rimraf ./dist && tsc",
     "test": "npm run lint && npm run find-todo && npm run mocha",
+    "debug": "node --inspect -r ts-node/register src/main",
     "start": "npm test && npm run build && node ./dist/main.js",
     "prepublish": "npm test && npm run build"
   },
