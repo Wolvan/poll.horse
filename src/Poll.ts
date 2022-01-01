@@ -1,9 +1,9 @@
 "use strict";
-
+type DupeCheckMode = "none" | "ip" | "cookie";
 type BasePoll = {
     id: string,
     title: string,
-    dupeCheckMode: "none" | "ip" | "cookie",
+    dupeCheckMode: DupeCheckMode,
     multiSelect: boolean,
     captcha: boolean,
     creationTime: Date,
@@ -30,5 +30,6 @@ type PollResult = {
 export {
     FrontendPoll,
     BackendPoll,
-    PollResult
+    PollResult,
+    DupeCheckMode
 };

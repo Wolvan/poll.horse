@@ -126,5 +126,29 @@ export default function init(router: Router): void {
             res.redirect(`/`);
         }
     });
-    router.get("/", (req, res) => displayPage(req, res, "index.html"));
+
+    router.get("/", (req, res) => {
+        const options = (typeof req.query.options === "string" ? req.query.options.split("\uFFFE") : [])
+            .filter(i => i)
+            .concat(Array(3).fill(""))
+            .slice(0, 3);
+        const pollOptionDivs = options.map(option => `
+            <div class="poll-option">
+                <input type="text" name="poll-option" maxlength="300" placeholder="Enter your option here" value="${option}">
+            </div>
+        `).join("");
+
+        displayPage(req, res, "index.html", {
+            "BACKEND_BASE_PATH": (program.opts().backendBaseUrl || ""),
+            "FORM_SUBMISSION_ERROR": req.query.error,
+            "FORM_SUBMISSION_ERROR_SHOWN_CLASS": req.query.error ? "error-visible" : "",
+            "FORM_TITLE": req.query.title || "",
+            "FORM_DUPECHECK_IP": req.query.dupecheck === "ip" ? "selected" : "",
+            "FORM_DUPECHECK_COOKIE": req.query.dupecheck === "cookie" ? "selected" : "",
+            "FORM_DUPECHECK_NONE": req.query.dupecheck === "none" ? "selected" : "",
+            "FORM_MULTI_SELECT": req.query.multiselect === "true" ? "checked" : "",  
+            "FORM_CAPTCHA": req.query.captcha === "true" ? "checked" : "",
+            "FORM_OPTION_DIVS": pollOptionDivs
+        });
+    });
 }

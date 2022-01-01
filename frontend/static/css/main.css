@@ -88,6 +88,7 @@ main .notepad-border {
 }
 /* #endregion notepad */
 /* #region notepad-footer */
+main .notepad .poll-footer input[type="submit"],
 main .notepad .poll-footer button {
     padding: 0 30px;
     height: 50px;
@@ -100,6 +101,7 @@ main .notepad .poll-footer button {
     color: #fff;
     margin-right: 5px;
 }
+main .notepad .poll-footer input[type="submit"]:hover,
 main .notepad .poll-footer button:hover {
     background-color: #b6b6b6;
 }

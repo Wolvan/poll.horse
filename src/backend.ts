@@ -4,7 +4,7 @@ import { Router } from "express";
 import persist from "node-persist";
 import { program } from "commander";
 import { resolve } from "path";
-import { BackendPoll as Poll } from "./Poll";
+import { BackendPoll as Poll, DupeCheckMode } from "./Poll";
 
 function randomString(length = 10, charset = "abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789") {
     let result = "";
@@ -60,39 +60,96 @@ export default async function init(router: Router): Promise<void> {
         }
     });
 
+    async function createPoll(pollData: {
+        title: string,
+        options: string[],
+        dupeCheckMode: DupeCheckMode,
+        multiSelect: boolean,
+        captcha: boolean
+    }): Promise<Poll | string> {
+        if (!Array.isArray(pollData.options) || pollData.options.filter(i => i).length < 2)
+            return "Options must be an array and have at least 2 entries";
+
+        let id = randomString(8);
+        while (await polls.getItem(id)) id = randomString(6);
+        await polls.setItem(id, {});
+
+        const dupeCheckMode = (
+            ["none", "ip", "cookie"].includes((pollData.dupeCheckMode || "").toLowerCase()) ? 
+            (pollData.dupeCheckMode || "").toLowerCase() : "ip"
+        ) as DupeCheckMode;
+        const dupeData =
+            dupeCheckMode === "none" ? null :
+            dupeCheckMode === "ip" ? [] :
+            dupeCheckMode === "cookie" ? randomString(16) : null;
+        const poll: Poll = {
+            id,
+            title: (pollData.title || "").trim().slice(0, 300),
+            options: (() => {
+                const result: { [option: string]: number } = {};
+                for (const option of pollData.options.map(i => i.trim().slice(0, 300))) {
+                    if (option) result[option] = 0;
+                }
+                return result;
+            })(),
+            dupeCheckMode,
+            dupeData,
+            multiSelect: pollData.multiSelect || false,
+            captcha: pollData.captcha || false,
+            creationTime: new Date()
+        };
+        await polls.setItem(id, poll);
+        return poll;
+    }
+
     router.post("/poll", async (req, res) => {
         try {
-            const options = req.body.options;
-            if (!Array.isArray(options) || options.filter(i => i).length < 2)
-                return res.status(400).json({ error: "Options must be an array and have at least 2 entries" });
-            let id = randomString(8);
-            while (await polls.getItem(id)) id = randomString(6);
-            await polls.setItem(id, {});
-            const dupeCheckMode = ["none", "ip", "cookie"].includes((req.body.dupeCheckMode || "").toLowerCase()) ? (req.body.dupeCheckMode || "").toLowerCase() : "ip";
-            const dupeData =
-                dupeCheckMode === "none" ? null :
-                dupeCheckMode === "ip" ? [] :
-                dupeCheckMode === "cookie" ? randomString(16) : null;
-            const poll: Poll = {
-                id,
+            const poll = await createPoll({
                 title: (req.body.title || "").trim().slice(0, 300),
-                options: (() => {
-                    const result: { [option: string]: number } = {};
-                    for (const option of options.map(i => i.trim().slice(0, 300))) {
-                        if (option) result[option] = 0;
-                    }
-                    return result;
-                })(),
-                dupeCheckMode,
-                dupeData,
+                options: req.body.options,
+                dupeCheckMode: req.body.dupeCheckMode,
                 multiSelect: req.body.multiSelect || false,
                 captcha: req.body.captcha || false,
-                creationTime: new Date()
-            };
-            await polls.setItem(id, poll);
-            res.json({
-                id: id
             });
+            if (typeof poll !== "string") res.json({
+                id: poll.id
+            });
+            else res.status(400).json({
+                error: poll
+            });
+        } catch (error) {
+            console.error(error);
+            if (error instanceof Error) res.status(500).json({
+                error: error.message
+            });
+            else res.status(500).json({
+                error: error
+            });
+        }
+    });
+    router.post("/poll-form", async (req, res) => {
+        try {
+            const poll = await createPoll({
+                title: (req.body["poll-title"] || "").trim().slice(0, 300),
+                options: req.body["poll-option"],
+                dupeCheckMode: req.body["dupe-check"],
+                multiSelect: req.body["multi-select"] === "on",
+                captcha: req.body["captcha"] === "on",
+            });
+            if (typeof poll !== "string") res.redirect("/" + poll.id);
+            else res.redirect(`/?error=${
+                encodeURIComponent(poll)
+            }&title=${
+                encodeURIComponent(req.body["poll-title"])
+            }&options=${
+                encodeURIComponent((req.body["poll-option"] || []).join("\uFFFE"))
+            }&dupecheck=${
+                encodeURIComponent(req.body["dupe-check"])
+            }&multiselect=${
+                req.body["multi-select"] === "on"
+            }&captcha=${
+                req.body["captcha"] === "on"
+            }`);
         } catch (error) {
             console.error(error);
             if (error instanceof Error) res.status(500).json({

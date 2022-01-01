@@ -17,33 +17,27 @@
     <main>
         <section class="notepad">
             <div class="notepad-border"></div>
-            <section class="poll-title">
-                <input id="poll-title" type="text" maxlength="300" placeholder="Enter your question here">
-            </section>
-            <section id="poll-options" class="poll-options">
-                <div class="poll-option">
-                    <input type="text" maxlength="300" placeholder="Enter your option here">
-                </div>
-                <div class="poll-option">
-                    <input type="text" maxlength="300" placeholder="Enter your option here">
-                </div>
-                <div class="poll-option">
-                    <input type="text" maxlength="300" placeholder="Enter your option here">
-                </div>
-            </section>
-            <section class="poll-footer">
-                <select id="dupe-check">
-                    <option value="ip" selected>IP-based duplication checking</option>
-                    <option value="cookie">Cookie-based duplication checking</option>
-                    <option value="none">No duplication checking</option>
-                </select>
-                <br>
-                <label>
-                    <input type="checkbox" id="multiple">
-                    <span>Allow multiple answers to be selected</span>
-                </label>
-                <br>
-                <button id="create-poll">Create poll</button>
+            <form action="{{ BACKEND_BASE_PATH }}/_backend/poll-form" method="POST">
+                <section class="poll-title">
+                    <input id="poll-title" name="poll-title" type="text" maxlength="300" placeholder="Enter your question here" value="{{ FORM_TITLE }}">
+                </section>
+                <section id="poll-options" class="poll-options">
+                    {{ FORM_OPTION_DIVS }}
+                </section>
+                <section class="poll-footer">
+                    <select id="dupe-check" name="dupe-check">
+                        <option value="ip" {{ FORM_DUPECHECK_IP }}>IP-based duplication checking</option>
+                        <option value="cookie" {{ FORM_DUPECHECK_COOKIE }}>Cookie-based duplication checking</option>
+                        <option value="none" {{ FORM_DUPECHECK_NONE }}>No duplication checking</option>
+                    </select>
+                    <br>
+                    <label>
+                        <input type="checkbox" name="multi-select" {{ FORM_MULTI_SELECT }} id="multiple">
+                        <span>Allow multiple answers to be selected</span>
+                    </label>
+                    <br>
+                    <input type="submit" name="submit" value="Create poll"  id="create-poll">
+                </form>
             </section>
         </section>
     </main>
