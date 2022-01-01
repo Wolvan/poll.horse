@@ -15,6 +15,9 @@
         <h3>Make voting on things simpler</h3>
     </header>
     <main>
+        <section class="error {{ FORM_SUBMISSION_ERROR_SHOWN_CLASS }}">
+            {{ FORM_SUBMISSION_ERROR }}
+        </section>
         <section class="notepad">
             <div class="notepad-border"></div>
             <form action="{{ BACKEND_BASE_PATH }}/_backend/poll-form" method="POST">

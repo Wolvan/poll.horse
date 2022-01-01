@@ -3,6 +3,15 @@
     padding: 0;
 }
 
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
 body {
     width: 100vw;
     height: 100vh;
@@ -41,6 +50,32 @@ main {
     position: relative;
     padding-bottom: 120px;
 }
+/* #region Error */
+main .error {
+    display: none;
+    position: absolute;
+    width: calc(40% - 10px);
+    min-width: 310px;
+    border: 1px solid red;
+    border-radius: 5px;
+    background-color: #cf2828cc;
+    left: 50%;
+    top: 25px;
+    transform: translate(-50%, 0);
+    text-align: center;
+    font-size: 1.5em;
+    z-index: 1;
+    animation: fadeOut .3s linear;
+    animation-delay: 3s;
+    animation-fill-mode: forwards;
+    pointer-events: none;
+    font-family: Arial, sans-serif;
+    padding: 5px;
+}
+main .error.error-visible {
+    display: block;
+}
+/* #endregion Error */
 /* #region notepad */
 main .notepad {
     position: relative;
