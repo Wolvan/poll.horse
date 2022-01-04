@@ -55,7 +55,11 @@ class MinificationTransform extends RenderTransform {
 
 const defaultReplacements = {
     "TITLE": "Poll Horse",
-    "DEVELOPER_CONTACT_INFO": "developer@poll.horse"
+    "DEVELOPER_CONTACT_INFO": "developer@poll.horse",
+    "FOOTER_COPYRIGHT": `© ${ (new Date()).getFullYear() } Wolvan`,
+    "FOOTER_LINKS": `
+        <li><a href="https://github.com/Wolvan/poll.horse" target="_blank">Github Repo</a></li>
+    `
 };
 class Defaults2RenderTransform extends MinificationTransform {
     constructor(replacements = {}) {
