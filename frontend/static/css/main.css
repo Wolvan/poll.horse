@@ -76,6 +76,16 @@ main .error.error-visible {
     display: block;
 }
 /* #endregion Error */
+/* #region ID */
+main .poll-id {
+    position: absolute;
+    right: 30%;
+    top: 20px;
+    font-family: Arial, sans-serif;
+    color: #fff;
+    font-size: 1.75em;
+}
+/* #endregion ID */
 /* #region notepad */
 main .notepad {
     position: relative;
@@ -88,6 +98,7 @@ main .notepad {
 }
 main .notepad .poll-title {
     height: 70px;
+    font-size: 0.9em;
 }
 main .notepad .poll-title input {
     font-size: 2em;
@@ -112,6 +123,58 @@ main .notepad .poll-footer {
     padding-left: 10%;
     padding-right: 5px;
     width: calc(90% - 5px);
+    position: relative;
+}
+
+main .notepad .poll-options .poll-option .input-container {
+    position: relative;
+    width: 25px;
+    height: 25px;
+    display: inline-block;
+    vertical-align: top;
+    top: 13px;
+}
+
+main .notepad .poll-options .poll-option input[type="checkbox"],
+main .notepad .poll-options .poll-option input[type="radio"] {
+    appearance: none;
+    position: absolute;
+    vertical-align: top;
+    top: 0;
+    left: 0;
+    width: 25px;
+    height: 25px;
+    border: 1px solid #b1b874;
+    border-radius: 5px;
+    margin-right: 5px;
+}
+main .notepad .poll-options .poll-option svg.checkmark {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: block;
+    stroke-width: 2;
+    stroke: #cf2828;
+    stroke-miterlimit: 10;
+    stroke-dashoffset: 0;
+    margin: 10% auto;
+}
+main .notepad .poll-options .poll-option div.checkmark {
+    position: absolute;
+    top: -25px;
+    left: -20px;
+    display: none;
+    pointer-events: none;
+}
+main .notepad .poll-options .poll-option input[type="checkbox"]:checked ~ div.checkmark,
+main .notepad .poll-options .poll-option input[type="radio"]:checked ~ div.checkmark {
+    display: block;
+}
+main .notepad .poll-options .poll-option .text {
+    display: inline-block;
+    vertical-align: top;
+    width: calc(100% - 25px - 5px);
+    height: 100%;
 }
 
 main .notepad-border {
@@ -119,8 +182,8 @@ main .notepad-border {
     left: 5%;
     height: 100%;
     width: 5px;
-    border-left: 2px solid red;
-    border-right: 2px solid red;
+    border-left: 2px solid #cf2828;
+    border-right: 2px solid #cf2828;
 }
 /* #endregion notepad */
 /* #region notepad-footer */
@@ -142,10 +205,10 @@ main .notepad .poll-footer button:hover {
     background-color: #b6b6b6;
 }
 
-#create-poll {
+#submit-button {
     background-color: #cf2828;
 }
-#create-poll:hover {
+#submit-button:hover {
     background-color: #e94747;
 }
 main .notepad .poll-footer input[type="checkbox"] {

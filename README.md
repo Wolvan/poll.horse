@@ -31,3 +31,8 @@ Execute the scripts with `npm run <script>`
 - `test` - Runs `lint`, `find-todo` and `mocha` in order
 - `debug` - Start the `./src/main.ts` with node and start the debugger on port 9229
 - `start` - Run `test` and `build`, then try and execute the `./dist/main.js` in the `./dist` directory to test
+
+## Components
+This project makes use of the following components. Thanks a lot to the respective creators:
+
+- [textFit](https://github.com/STRML/textFit)

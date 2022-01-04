@@ -4,10 +4,56 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ TITLE }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/main.css">
+    <script type="text/javascript" src="/static/js/textfit.js" defer="true"></script>
+    <script type="text/javascript">
+        const textFitOptions = {
+            multiLine: true
+        };
+        document.addEventListener('DOMContentLoaded', function() {
+            textFit(document.querySelector(".poll-title"), textFitOptions);
+            document.querySelectorAll(".poll-option .text").forEach(element => textFit(element, textFitOptions));
+        });
+        window.addEventListener("resize", function() {
+            textFit(document.querySelector(".poll-title"), textFitOptions);
+            document.querySelectorAll(".poll-option .text").forEach(element => textFit(element, textFitOptions));
+        });
+    </script>
 </head>
 <body>
-    <h1>Welcome to poll.horse!</h1>
-    <h2>{{ POLL_TITLE }}</h2>
+    <header>
+        <h1>Poll.horse</h1>
+        <h3>Make voting on things simpler</h3>
+    </header>
+    <main>
+        <section class="error {{ FORM_SUBMISSION_ERROR_SHOWN_CLASS }}">
+            {{ FORM_SUBMISSION_ERROR }}
+        </section>
+        <section class="poll-id">ID: {{ POLL_ID }}</section>
+        <section class="notepad">
+            <div class="notepad-border"></div>
+            <form action="{{ BACKEND_BASE_PATH }}/_backend/vote-form/{{ POLL_ID }}" method="POST">
+                <section class="poll-title" {{ TITLE_FONT_SIZE_STYLE }}>
+                    {{ POLL_TITLE }}
+                </section>
+                <section id="poll-options" class="poll-options">
+                    {{ POLL_OPTION_DIVS }}
+                </section>
+                <section class="poll-footer">
+                    <input type="submit" name="submit" value="Vote"  id="submit-button">
+                    <a href="/{{ POLL_ID }}/r"><button type="button">Results</button></a>
+                </form>
+            </section>
+        </section>
+    </main>
+    <footer>
+        <ul>
+            {{ FOOTER_LINKS }}
+        </ul>
+        <div class="copyright">{{ FOOTER_COPYRIGHT }}</div>
+    </footer>
 </body>
 </html>

@@ -121,10 +121,22 @@ export default function init(router: Router): void {
                 (program.opts().backendBaseUrl || "http://localhost:" + program.opts().port) + "/_backend/poll/" + id
             ).then(r => r.json()) as Poll;
             if (!poll || poll.error) return res.redirect("/");
+
+            const pollOptions = poll.options.map(option =>
+                `<div class="poll-option">
+                    <div class="input-container">
+                        <input type="${poll.multiSelect ? "checkbox" : "radio"}" name="poll-option" value="${option}"" /><div class="checkmark"><svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/></svg></div>
+                    </div><div class="text">${option}</div>
+                </div>`
+            ).join("");
+
             await displayPage(req, res, "poll.html", {
-                "POLL_ID": id,
+                "POLL_ID": poll.id,
                 "POLL_TITLE": poll.title,
-                
+                "POLL_OPTION_DIVS": pollOptions,
+                "BACKEND_BASE_PATH": (program.opts().backendBaseUrl || ""),
+                "FORM_SUBMISSION_ERROR": req.query.error,
+                "FORM_SUBMISSION_ERROR_SHOWN_CLASS": req.query.error ? "error-visible" : "",
             });
         } catch (error) {
             console.log(error);
