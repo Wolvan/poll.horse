@@ -13,7 +13,7 @@ Before cloning this repository, make sure you have [Node](https://www.nodejs.org
 
 Then clone this repository, open a terminal/command prompt and type `npm i` to install the required dependencies.
 
-`ts-node` is recommended to test during development, install it with `npm i -g ts-node typescript`.
+`ts-node` is recommended to test during development manually, install it with `npm i -g ts-node typescript`.
 
 ## Directory Structure
 - `./dist` - The finalized and compiled files that can be used with node
@@ -29,7 +29,7 @@ Execute the scripts with `npm run <script>`
 - `lint` - Runs `eslint` and checks for code styling problems
 - `build` - Compile the TypeScript Source to `dist/`
 - `test` - Runs `lint`, `find-todo` and `mocha` in order
-- `debug` - Start the `./src/main.ts` with node and start the debugger on port 9229
+- `debug` - Start the `./src/main.ts` with node and start the debugger on port 9229. Files will be watched for changes.
 - `start` - Run `test` and `build`, then try and execute the `./dist/main.js` in the `./dist` directory to test
 
 ## Components

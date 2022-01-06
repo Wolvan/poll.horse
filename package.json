@@ -10,7 +10,7 @@
     "lint": "eslint .",
     "build": "rimraf ./dist && tsc",
     "test": "npm run lint && npm run find-todo && npm run mocha",
-    "debug": "node --inspect -r ts-node/register src/main",
+    "debug": "ts-node-dev --inspect --respawn --clear ./src/main.ts",
     "start": "npm test && npm run build && node ./dist/main.js",
     "prepublish": "npm test && npm run build"
   },
@@ -54,7 +54,7 @@
     "klaw": "^4.0.1",
     "mocha": "^9.1.3",
     "rimraf": "^3.0.2",
-    "ts-node": "^10.4.0",
+    "ts-node-dev": "^1.1.8",
     "typescript": "^4.5.2"
   },
   "dependencies": {
