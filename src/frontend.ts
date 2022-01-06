@@ -15,7 +15,6 @@ interface NodeError extends Error {
     code?: string;
 }
 
-// TODO: Implement conditional transform
 class RenderTransform extends TransformStream {
     constructor(replacements = {}) {
         super();

@@ -5,7 +5,7 @@
   "main": "dist/main.js",
   "types": "dist/main.d.ts",
   "scripts": {
-    "find-todo": "node utils/todo-finder.js .",
+    "find-todo": "node utils/todo-finder.js ./src && node utils/todo-finder.js ./frontend",
     "mocha": "mocha",
     "lint": "eslint .",
     "build": "rimraf ./dist && tsc",
@@ -29,7 +29,8 @@
     "url": "https://github.com/Wolvan/poll.horse/issues"
   },
   "files": [
-    "/dist"
+    "/dist",
+    "/frontend"
   ],
   "homepage": "https://github.com/Wolvan/poll.horse#readme",
   "devDependencies": {
@@ -54,6 +55,7 @@
     "klaw": "^4.0.1",
     "mocha": "^9.1.3",
     "rimraf": "^3.0.2",
+    "ts-node": "^10.4.0",
     "ts-node-dev": "^1.1.8",
     "typescript": "^4.5.2"
   },

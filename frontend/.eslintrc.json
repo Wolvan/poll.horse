@@ -14,5 +14,8 @@
 
         "textFit": "readonly",
         "google": "readonly"
-    }
+    },
+    "ignorePatterns": [
+        "vendor/**/*"
+    ]
 }
