@@ -7,6 +7,10 @@
     },
     "globals": {
         "MAX_POLL_OPTIONS": "readonly",
-        "MAX_CHARACTER_LENGTH": "readonly"
+        "MAX_CHARACTER_LENGTH": "readonly",
+        "POLL_VOTE_DATA_STRING": "readonly",
+
+        "textFit": "readonly",
+        "google": "readonly"
     }
 }

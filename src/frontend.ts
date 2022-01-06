@@ -104,10 +104,26 @@ export default function init(router: Router): void {
                 (program.opts().backendBaseUrl || "http://localhost:" + program.opts().port) + "/_backend/poll-result/" + id
             ).then(r => r.json()) as PollResult;
             if (!poll || poll.error) return res.redirect("/");
+            const totalVotes = Object.values(poll.votes).reduce((acc, cur) => acc + cur, 0);
+            const pollOptionsDivs = Object.entries(poll.votes).map(([option, votes]) => `
+                <div class="poll-option">
+                    <div class="poll-option-info">
+                        <div class="poll-option-text">${ option }</div><div class="poll-option-votes">${ votes }</div>
+                    </div>
+                    <div class="progress">
+                        <div class="poll-bar">
+                            <div class="poll-bar-fill" style="width: ${ (votes / totalVotes) * 100 }%"></div>
+                        </div><div class="poll-bar-text">${ Math.round((votes / totalVotes) * 100) }%</div>
+                    </div>
+                </div>
+            `).join("");
+
             await displayPage(req, res, "result.html", {
                 "POLL_ID": id,
                 "POLL_TITLE": poll.title,
-                
+                "POLL_OPTION_DIVS": pollOptionsDivs,
+                "POLL_VOTES_TOTAL": totalVotes,
+                "POLL_OPTION_VOTES": JSON.stringify(Object.entries(poll.votes))
             });
         } catch (error) {
             console.log(error);

@@ -4,10 +4,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ TITLE }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/main.css">
+    <link rel="stylesheet" href="/static/css/result.css">
+    <script type="text/javascript" src="/static/js/textfit.js" defer="true"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js" defer="true"></script>
+    <script type="text/javascript">
+        const POLL_VOTE_DATA_STRING = `{{ POLL_OPTION_VOTES }}`;
+    </script>
+    <script type="text/javascript" src="/static/js/result.js" defer="true"></script>
 </head>
 <body>
-    <h1>Welcome to poll.horse!</h1>
-    <h2>{{ POLL_TITLE }} - Result</h2>
+    <header>
+        <h1>Poll.horse</h1>
+        <h3>Make voting on things simpler</h3>
+    </header>
+    <main>
+        <section class="poll-id">ID: {{ POLL_ID }}</section>
+        <section class="notepad">
+            <div class="notepad-border"></div>
+            <section class="poll-title">
+                {{ POLL_TITLE }}
+            </section>
+            <section id="poll-options" class="poll-options">
+                {{ POLL_OPTION_DIVS }}
+            </section>
+            <section class="poll-footer">
+                <a href="/{{ POLL_ID }}"><button type="button" id="submit-button">Vote</button></a>
+            </section>
+            <aside id="chart"></aside>
+        </section>
+    </main>
+    <footer>
+        <ul>
+            {{ FOOTER_LINKS }}
+        </ul>
+        <div class="copyright">{{ FOOTER_COPYRIGHT }}</div>
+    </footer>
 </body>
 </html>

@@ -1,0 +1,69 @@
+main .notepad .poll-option {
+    height: 80px;
+    width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+}
+main .notepad .poll-option .poll-option-info,
+main .notepad .poll-option .progress {
+    height: 40px;
+}
+main .notepad .poll-option .poll-option-info {
+    padding-left: 10%;
+    border-bottom: 1px solid #b1b874;
+}
+main .notepad .poll-option .poll-option-info .poll-option-text {
+    display: inline-block;
+    vertical-align: top;
+    height: 100%;
+    width: calc(100% - 105px);
+}
+main .notepad .poll-option .poll-option-info .poll-option-votes,
+main .notepad .poll-option .progress .poll-bar-text {
+    display: inline-block;
+    vertical-align: top;
+    height: 100%;
+    width: 105px;
+    line-height: 40px;
+    font-size: 1.5em;
+    text-align: right;
+}
+main .notepad .poll-option .poll-option-info .poll-option-votes::after {
+    content: "Votes";
+    margin-left: 5px;
+    padding-right: 10px;
+}
+main .notepad .poll-option .progress {
+    width: 90%;
+    padding-left: 10%;
+}
+main .notepad .poll-option .progress .poll-bar {
+    vertical-align: top;
+    display: inline-block;
+    height: 100%;
+    width: calc(100% - 60px);
+}
+main .notepad .poll-option .progress .poll-bar .poll-bar-fill {
+    height: calc(100% - 5px);
+    margin-top: 2px;
+    background-color: #cf2828;
+    transition: width .3s;
+}
+main .notepad .poll-option .progress .poll-bar-text {
+    width: 50px;
+    padding-right: 10px;
+}
+
+aside#chart {
+    position: absolute;
+    top: 0px;
+    right: -200px;
+    width: 200px;
+    height: 200px;
+}
+
+@media screen and (max-width: 750px) {
+    aside#chart {
+        visibility: hidden !important;
+    }
+}

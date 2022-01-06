@@ -36,3 +36,4 @@ Execute the scripts with `npm run <script>`
 This project makes use of the following components. Thanks a lot to the respective creators:
 
 - [textFit](https://github.com/STRML/textFit)
+- [Google Charts](https://developers.google.com/chart)
