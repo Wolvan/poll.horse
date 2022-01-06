@@ -116,6 +116,7 @@ export default function init(router: Router): void {
     });
     router.get("/:id", async (req, res) => {
         const id = req.params.id;
+        const options = (typeof req.query.options === "string" ? req.query.options.split("\uFFFE") : []).filter(i => i);
         try {
             const poll: Poll = await fetch(
                 (program.opts().backendBaseUrl || "http://localhost:" + program.opts().port) + "/_backend/poll/" + id
@@ -125,7 +126,7 @@ export default function init(router: Router): void {
             const pollOptions = poll.options.map(option =>
                 `<div class="poll-option">
                     <div class="input-container">
-                        <input type="${poll.multiSelect ? "checkbox" : "radio"}" name="poll-option" value="${option}"" /><div class="checkmark"><svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/></svg></div>
+                        <input type="${poll.multiSelect ? "checkbox" : "radio"}" name="poll-option" value="${option}"" ${options.includes(option) ? "checked" : ""}/><div class="checkmark"><svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/></svg></div>
                     </div><div class="text">${option}</div>
                 </div>`
             ).join("");

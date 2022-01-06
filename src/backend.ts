@@ -1,6 +1,6 @@
 "use strict";
 
-import { Router } from "express";
+import { CookieOptions, Router } from "express";
 import persist from "node-persist";
 import { program } from "commander";
 import { resolve } from "path";
@@ -164,36 +164,88 @@ export default async function init(router: Router): Promise<void> {
         }
     });
 
+    async function voteOnPoll(pollId: string, votes: string[], { ip, setCookie, cookies }: {
+        ip: string,
+        setCookie: (name: string, value: string, options?: CookieOptions) => void,
+        cookies: { [key: string]: string }
+    }): Promise<null|{
+        error: string,
+        statusCode: number
+    }> {
+        const poll: (Poll | undefined) = await polls.getItem(pollId);
+        if (!poll) return {
+            error: "Poll not found",
+            statusCode: 404
+        };
+
+        const possibleVotes = Object.keys(poll.options);
+        if (!Array.isArray(votes) || votes.filter(i => i && possibleVotes.includes(i)).length < 1) return {
+            error: "Votes must be an array and have at least 1 entry",
+            statusCode: 400
+        };
+        if (!poll.multiSelect && votes.filter(i => i && possibleVotes.includes(i)).length > 1) return {
+            error: "Single-select polls can only have one vote",
+            statusCode: 400
+        };
+
+        if (poll.dupeCheckMode === "ip") {
+            if (Array.isArray(poll.dupeData) && poll.dupeData.includes(ip as string)) return null;
+            if (Array.isArray(poll.dupeData)) poll.dupeData.push(ip as string);
+        } else if (poll.dupeCheckMode === "cookie") {
+            const cookie = cookies[poll.dupeData as string];
+            if (cookie) return null;
+            setCookie(poll.dupeData as string, "1", {
+                httpOnly: true,
+                maxAge: (1000 * 60 * 60 * 24 * 365) / 2
+            });
+        }
+        votes.filter(i => i && possibleVotes.includes(i)).forEach(vote => poll.options[vote]++);
+        await polls.setItem(pollId, poll);
+
+        return null;
+    }
     router.post("/vote/:id", async (req, res) => {
         try {
             const id = req.params.id;
-            const poll: (Poll | undefined) = await polls.getItem(id);
-            if (!poll) return res.status(404).json({ error: "Poll not found" });
-            
-            const votes = req.body.votes;
-            const possibleVotes = Object.keys(poll.options);
-            if (!Array.isArray(votes) || votes.filter(i => i && possibleVotes.includes(i)).length < 1)
-                return res.status(400).json({ error: "Votes must be an array and have at least 1 entry" });
-            if (!poll.multiSelect && votes.filter(i => i && possibleVotes.includes(i)).length > 1)
-                return res.status(400).json({ error: "Single-select polls can only have one vote" });
 
-            if (poll.dupeCheckMode === "ip") {
-                const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress || "";
-                if (Array.isArray(poll.dupeData) && poll.dupeData.includes(ip as string)) return res.status(200).json({ status: "ok", id });
-                if (Array.isArray(poll.dupeData)) poll.dupeData.push(ip as string);
-            } else if (poll.dupeCheckMode === "cookie") {
-                const cookie = req.cookies[poll.dupeData as string];
-                if (cookie) return res.status(200).json({ status: "ok", id });
-                res.cookie(poll.dupeData as string, "1", {
-                    httpOnly: true,
-                    maxAge: (1000 * 60 * 60 * 24 * 365) / 2
-                });
-            }
+            const error = await voteOnPoll(id, req.body.votes, {
+                ip: req.headers["x-forwarded-for"] as string || req.socket.remoteAddress || "",
+                setCookie: res.cookie.bind(res),
+                cookies: req.cookies
+            });
 
-            votes.filter(i => i && possibleVotes.includes(i)).forEach(vote => poll.options[vote]++);
-            await polls.setItem(id, poll);
+            if (error) res.status(error.statusCode).json({
+                error: error.error
+            });
+            else res.json({ status: "ok", id });
+        } catch (error) {
+            console.error(error);
+            if (error instanceof Error) res.status(500).json({
+                error: error.message
+            });
+            else res.status(500).json({
+                error: error
+            });
+        }
+    });
+    router.post("/vote-form/:id", async (req, res) => {
+        try {
+            const id = req.params.id;
+            const votes = [].concat(req.body["poll-option"]);
 
-            res.json({ status: "ok", id });
+            const error = await voteOnPoll(id, votes, {
+                ip: req.headers["x-forwarded-for"] as string || req.socket.remoteAddress || "",
+                setCookie: res.cookie.bind(res),
+                cookies: req.cookies
+            });
+
+            if (!error) return res.redirect("/" + id + "/r");
+            if (error.statusCode === 404) return res.redirect("/");
+            res.redirect(`/${id}?error=${
+                encodeURIComponent(error.error)
+            }&options=${
+                encodeURIComponent(votes.slice(0, MAX_POLL_OPTIONS).join("\uFFFE"))
+            }`);
         } catch (error) {
             console.error(error);
             if (error instanceof Error) res.status(500).json({
