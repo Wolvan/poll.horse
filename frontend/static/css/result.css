@@ -41,7 +41,7 @@ main .notepad .poll-option .progress .poll-bar {
     vertical-align: top;
     display: inline-block;
     height: 100%;
-    width: calc(100% - 60px);
+    width: calc(100% - 50px);
 }
 main .notepad .poll-option .progress .poll-bar .poll-bar-fill {
     height: calc(100% - 5px);
@@ -51,6 +51,10 @@ main .notepad .poll-option .progress .poll-bar .poll-bar-fill {
 }
 main .notepad .poll-option .progress .poll-bar-text {
     width: 50px;
+}
+main .notepad .poll-option .progress .poll-bar-text::after {
+    content: "%";
+    margin-left: 5px;
     padding-right: 10px;
 }
 
@@ -60,6 +64,7 @@ aside#chart {
     right: -200px;
     width: 200px;
     height: 200px;
+    visibility: hidden;
 }
 
 @media screen and (max-width: 750px) {

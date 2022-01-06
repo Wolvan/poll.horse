@@ -106,14 +106,14 @@ export default function init(router: Router): void {
             if (!poll || poll.error) return res.redirect("/");
             const totalVotes = Object.values(poll.votes).reduce((acc, cur) => acc + cur, 0);
             const pollOptionsDivs = Object.entries(poll.votes).map(([option, votes]) => `
-                <div class="poll-option">
+                <div class="poll-option" option="${ option }">
                     <div class="poll-option-info">
                         <div class="poll-option-text">${ option }</div><div class="poll-option-votes">${ votes }</div>
                     </div>
                     <div class="progress">
                         <div class="poll-bar">
                             <div class="poll-bar-fill" style="width: ${ (votes / totalVotes) * 100 }%"></div>
-                        </div><div class="poll-bar-text">${ Math.round((votes / totalVotes) * 100) }%</div>
+                        </div><div class="poll-bar-text">${ Math.round((votes / totalVotes) * 100) }</div>
                     </div>
                 </div>
             `).join("");
@@ -123,6 +123,7 @@ export default function init(router: Router): void {
                 "POLL_TITLE": poll.title,
                 "POLL_OPTION_DIVS": pollOptionsDivs,
                 "POLL_VOTES_TOTAL": totalVotes,
+                "BACKEND_BASE_PATH": (program.opts().backendBaseUrl || ""),
                 "POLL_OPTION_VOTES": JSON.stringify(Object.entries(poll.votes))
             });
         } catch (error) {

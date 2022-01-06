@@ -1,5 +1,7 @@
 "use strict";
 
+const POLL_REFRESH_INTERVAL = 5000;
+
 const textFitOptions = {
     multiLine: true
 };
@@ -42,6 +44,33 @@ function domLoaded() {
         textFit(document.querySelector(".poll-title"), textFitOptions);
         document.querySelectorAll(".poll-option .poll-option-text").forEach(element => textFit(element, textFitOptions));
     });
+
+    let prevResult = null;
+    async function fetchNewestResults() {
+        try {
+            const response = await fetch(POLL_BACKEND_URL + "/_backend/poll-result/" + POLL_ID);
+            const json = await response.json();
+            if (json.error) throw new Error(json.error);
+            const votes = json.votes;
+            const totalVotes = Object.values(votes).reduce((a, b) => a + b, 0);
+            if (!prevResult || Object.entries(votes).some(([key, value]) => value !== prevResult[key])) {
+                drawChart(Object.entries(votes));
+                Object.entries(votes).forEach(([key, value]) => {
+                    const el = document.querySelector("main .notepad .poll-option[option='" + key + "']");
+                    if (!el) return;
+
+                    el.querySelector(".poll-option-votes").innerText = value;
+                    el.querySelector(".poll-bar-fill").style.width = (value / totalVotes * 100) + "%";
+                    el.querySelector(".poll-bar-text").innerText = Math.round(value / totalVotes * 100);
+                });
+                prevResult = votes;
+            }
+        } catch (error) {
+            console.warn(error);
+        }
+        setTimeout(fetchNewestResults, POLL_REFRESH_INTERVAL);
+    }
+    setTimeout(fetchNewestResults, POLL_REFRESH_INTERVAL);
 }
 
 if (document.readyState === "complete" || document.readyState === "loaded") domLoaded();
