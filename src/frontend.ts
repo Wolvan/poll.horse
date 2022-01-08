@@ -95,6 +95,15 @@ async function displayPage(req: Request, res: Response, htmlFilename: string, re
     }
 }
 
+function xss(unsafe: string) {
+    return unsafe
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
 export default function init(router: Router): void {
     router.get("/:id/r", async (req, res) => {
         const id = req.params.id;
@@ -105,9 +114,9 @@ export default function init(router: Router): void {
             if (!poll || poll.error) return res.redirect("/");
             const totalVotes = Object.values(poll.votes).reduce((acc, cur) => acc + cur, 0);
             const pollOptionsDivs = Object.entries(poll.votes).map(([option, votes]) => `
-                <div class="poll-option" option="${ option }">
+                <div class="poll-option" option="${ xss(option) }">
                     <div class="poll-option-info">
-                        <div class="poll-option-text">${ option }</div><div class="poll-option-votes">${ votes }</div>
+                        <div class="poll-option-text">${ xss(option) }</div><div class="poll-option-votes">${ votes }</div>
                     </div>
                     <div class="progress">
                         <div class="poll-bar">
@@ -119,7 +128,7 @@ export default function init(router: Router): void {
 
             await displayPage(req, res, "result.html", {
                 "POLL_ID": id,
-                "POLL_TITLE": poll.title,
+                "POLL_TITLE": xss(poll.title),
                 "POLL_OPTION_DIVS": pollOptionsDivs,
                 "POLL_VOTES_TOTAL": totalVotes,
                 "BACKEND_BASE_PATH": (program.opts().backendBaseUrl || ""),
@@ -142,17 +151,17 @@ export default function init(router: Router): void {
             const pollOptions = poll.options.map(option =>
                 `<div class="poll-option">
                     <div class="input-container">
-                        <input type="${poll.multiSelect ? "checkbox" : "radio"}" name="poll-option" value="${option}"" ${options.includes(option) ? "checked" : ""}/><div class="checkmark"><svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/></svg></div>
-                    </div><div class="text">${option}</div>
+                        <input type="${poll.multiSelect ? "checkbox" : "radio"}" name="poll-option" value="${xss(option)}"" ${options.includes(option) ? "checked" : ""}/><div class="checkmark"><svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/></svg></div>
+                    </div><div class="text">${xss(option)}</div>
                 </div>`
             ).join("");
 
             await displayPage(req, res, "poll.html", {
                 "POLL_ID": poll.id,
-                "POLL_TITLE": poll.title,
+                "POLL_TITLE": xss(poll.title),
                 "POLL_OPTION_DIVS": pollOptions,
                 "BACKEND_BASE_PATH": (program.opts().backendBaseUrl || ""),
-                "FORM_SUBMISSION_ERROR": req.query.error,
+                "FORM_SUBMISSION_ERROR": xss(req.query.error + ""),
                 "FORM_SUBMISSION_ERROR_SHOWN_CLASS": req.query.error ? "error-visible" : "",
             });
         } catch (error) {
@@ -168,7 +177,7 @@ export default function init(router: Router): void {
             .slice(0, 3);
         const pollOptionDivs = options.map(option => `
             <div class="poll-option">
-                <input type="text" name="poll-option" maxlength="${MAX_CHARACTER_LENGTH}" placeholder="Enter your option here" value="${option}">
+                <input type="text" name="poll-option" maxlength="${MAX_CHARACTER_LENGTH}" placeholder="Enter your option here" value="${xss(option)}">
             </div>
         `).join("");
 

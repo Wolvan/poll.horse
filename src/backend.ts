@@ -13,6 +13,15 @@ function randomString(length = 10, charset = "abcdefghjkmnpqrstuvwxyzABCDEFGHJKL
     return result;
 }
 
+function unxss(str: string) {
+    return str
+        .replace(/&amp;/g, "&")
+        .replace(/&lt;/g, "<")
+        .replace(/&gt;/g, ">")
+        .replace(/&quot;/g, "\"")
+        .replace(/&#039;/g, "'");
+}
+
 export default async function init(router: Router, polls: Storage): Promise<void> {    
     router.get("/poll/:id", async (req, res) => {
         try {
@@ -171,11 +180,11 @@ export default async function init(router: Router, polls: Storage): Promise<void
         };
 
         const possibleVotes = Object.keys(poll.options);
-        if (!Array.isArray(votes) || votes.filter(i => i && possibleVotes.includes(i)).length < 1) return {
+        if (!Array.isArray(votes) || votes.filter(i => i && possibleVotes.includes(unxss(i))).length < 1) return {
             error: "Votes must be an array and have at least 1 entry",
             statusCode: 400
         };
-        if (!poll.multiSelect && votes.filter(i => i && possibleVotes.includes(i)).length > 1) return {
+        if (!poll.multiSelect && votes.filter(i => i && possibleVotes.includes(unxss(i))).length > 1) return {
             error: "Single-select polls can only have one vote",
             statusCode: 400
         };
@@ -191,7 +200,7 @@ export default async function init(router: Router, polls: Storage): Promise<void
                 maxAge: (1000 * 60 * 60 * 24 * 365) / 2
             });
         }
-        votes.filter(i => i && possibleVotes.includes(i)).forEach(vote => poll.options[vote]++);
+        votes.filter(i => i && possibleVotes.includes(unxss(i))).forEach(vote => poll.options[unxss(vote)]++);
         await polls.setItem(pollId, poll);
 
         return null;
