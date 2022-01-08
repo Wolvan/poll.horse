@@ -1,11 +1,9 @@
 "use strict";
 
 import { CookieOptions, Router } from "express";
-import persist from "node-persist";
-import { program } from "commander";
-import { resolve } from "path";
 import { BackendPoll as Poll, DupeCheckMode } from "./Poll";
 import { MAX_POLL_OPTIONS, MAX_CHARACTER_LENGTH } from "./Config";
+import Storage from "./Storage";
 
 function randomString(length = 10, charset = "abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789") {
     let result = "";
@@ -15,12 +13,7 @@ function randomString(length = 10, charset = "abcdefghjkmnpqrstuvwxyzABCDEFGHJKL
     return result;
 }
 
-export default async function init(router: Router): Promise<void> {
-    const polls = await persist.create({
-        dir: resolve(process.cwd(), program.opts().dataDirectory)
-    });
-    await polls.init();
-    
+export default async function init(router: Router, polls: Storage): Promise<void> {    
     router.get("/poll/:id", async (req, res) => {
         try {
             const id = req.params.id;
@@ -75,7 +68,6 @@ export default async function init(router: Router): Promise<void> {
 
         let id = randomString(8);
         while (await polls.getItem(id)) id = randomString(6);
-        await polls.setItem(id, {});
 
         const dupeCheckMode = (
             ["none", "ip", "cookie"].includes((pollData.dupeCheckMode || "").toLowerCase()) ? 
