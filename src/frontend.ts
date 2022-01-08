@@ -111,8 +111,8 @@ export default function init(router: Router): void {
                     </div>
                     <div class="progress">
                         <div class="poll-bar">
-                            <div class="poll-bar-fill" style="width: ${ (votes / totalVotes) * 100 }%"></div>
-                        </div><div class="poll-bar-text">${ Math.round((votes / totalVotes) * 100) }</div>
+                            <div class="poll-bar-fill" style="width: ${ totalVotes > 0 ? (votes / totalVotes) * 100 : 0 }%"></div>
+                        </div><div class="poll-bar-text">${ totalVotes > 0 ? Math.round((votes / totalVotes) * 100) : 0 }</div>
                     </div>
                 </div>
             `).join("");
