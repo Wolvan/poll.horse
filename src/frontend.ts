@@ -58,6 +58,8 @@ const defaultReplacements = {
     "FOOTER_COPYRIGHT": `© ${ (new Date()).getFullYear() } Based Department`,
     "FOOTER_LINKS": `
         <li><a href="https://github.com/Wolvan/poll.horse" target="_blank">Github Repo</a></li>
+        <li><a href="https://www.mppp.horse/" target="_blank">/mppp/ - Mass Production plushies</a></li>
+        <li><a href="https://www.pon3.stream/" target="_blank">Pon3.Stream</a></li>
     `
 };
 class Defaults2RenderTransform extends MinificationTransform {
