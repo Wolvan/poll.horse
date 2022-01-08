@@ -35,7 +35,7 @@ function domLoaded() {
         };
  
         try {
-            drawChart(JSON.parse(POLL_VOTE_DATA_STRING));
+            drawChart(JSON.parse(window.atob(POLL_VOTE_DATA_STRING)));
         } catch (error) {
             // eh
         }

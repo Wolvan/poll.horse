@@ -123,7 +123,7 @@ export default function init(router: Router): void {
                 "POLL_OPTION_DIVS": pollOptionsDivs,
                 "POLL_VOTES_TOTAL": totalVotes,
                 "BACKEND_BASE_PATH": (program.opts().backendBaseUrl || ""),
-                "POLL_OPTION_VOTES": JSON.stringify(Object.entries(poll.votes))
+                "POLL_OPTION_VOTES": Buffer.from(JSON.stringify(Object.entries(poll.votes))).toString("base64")
             });
         } catch (error) {
             console.log(error);
