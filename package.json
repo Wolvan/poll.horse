@@ -11,7 +11,9 @@
     "build": "rimraf ./dist && tsc",
     "test": "npm run lint && npm run find-todo && npm run mocha",
     "debug": "ts-node-dev --inspect --respawn --clear ./src/main.ts",
-    "start": "npm test && npm run build && node ./dist/main.js",
+    "start:build": "npm test && npm run build && node ./dist/main.js",
+    "start": "node ./dist/main.js",
+    "heroku": "npm run start -- --port env:PORT --use-mysql --mysql-host env:MYSQL_HOST --mysql-port env:MYSQL_PORT --mysql-user env:MYSQL_USER --mysql-password env:MYSQL_PASSWORD --mysql-database env:MYSQL_DATABASE",
     "prepublish": "npm test && npm run build"
   },
   "repository": {
