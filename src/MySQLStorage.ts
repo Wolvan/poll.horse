@@ -7,14 +7,23 @@ import { BackendPoll as Poll } from "./Poll";
 
 export default class MySQLStorage extends Storage {
     #db: mysql.Connection;
+    #options: mysql.ConnectionOptions;
+    #createConnection(mysqlInstance?: mysql.Connection): void {
+        if (!mysqlInstance) this.#db = mysql.createConnection(this.#options);
+        this.#db.on("error", (err: mysql.QueryError) => {
+            if (err.fatal) this.#createConnection();
+        });
+    }
+    
     constructor(options: mysql.ConnectionOptions) {
         super();
+        this.#options = options;
         console.debug("Initiating MySQLStorage.");
-        this.#db = mysql.createConnection(options);
+        this.#db = mysql.createConnection(this.#options);
+        this.#createConnection(this.#db);
     }
 
     async init(): Promise<this> {
-        await this.#db.promise().connect();
         await this.#db.promise().query(`
             CREATE TABLE IF NOT EXISTS polls (
                 id INT AUTO_INCREMENT PRIMARY KEY,
