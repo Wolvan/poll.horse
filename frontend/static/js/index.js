@@ -14,7 +14,7 @@
         input.placeholder = "Enter your option here";
         optionEl.appendChild(input);
         
-        input.addEventListener("keydown", () => {
+        input.addEventListener("keyup", () => {
             if (inputList.every(el => el.value) && pollOptionsAnchor) pollOptionsAnchor.appendChild(createPollOptionInput());
         });
         inputList.push(input);
@@ -23,7 +23,7 @@
     }
     
     pollOptionsAnchor.querySelectorAll(".poll-option input").forEach(el => {
-        el.addEventListener("keydown", () => {
+        el.addEventListener("keyup", () => {
             if (inputList.every(el => el.value) && pollOptionsAnchor) pollOptionsAnchor.appendChild(createPollOptionInput());
         });
         inputList.push(el);
