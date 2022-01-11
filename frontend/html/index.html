@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/main.css">
+    <link rel="stylesheet" href="/static/css/index.css">
     <script type="text/javascript">
         const MAX_POLL_OPTIONS = "{{ MAX_POLL_OPTIONS }}";
         const MAX_CHARACTER_LENGTH = "{{ MAX_CHARACTER_LENGTH }}";
@@ -33,6 +34,7 @@
                     {{ FORM_OPTION_DIVS }}
                 </section>
                 <section class="poll-footer">
+                    <div id="extend-message">Used <span id="options-counter">0</span>/{{ MAX_POLL_OPTIONS }} options.<br>New boxes appear automatically.</div>
                     <select id="dupe-check" name="dupe-check">
                         <option value="ip" {{ FORM_DUPECHECK_IP }}>IP-based duplication checking</option>
                         <option value="cookie" {{ FORM_DUPECHECK_COOKIE }}>Cookie-based duplication checking</option>
@@ -44,7 +46,8 @@
                         <span>Multiple Choice</span>
                     </label>
                     <br>
-                    <input type="submit" name="submit" value="Create poll"  id="submit-button">
+                    <input type="submit" name="submit" value="Create poll" id="submit-button">
+                    <input type="submit" name="submit" value="Add options" formaction="#" formmethod="get" id="add-options-button">
                 </section>
             </form>
         </section>

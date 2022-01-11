@@ -173,10 +173,12 @@ export default function init(router: Router): void {
     });
 
     router.get("/", (req, res) => {
-        const options = (typeof req.query.options === "string" ? req.query.options.split("\uFFFE") : [])
-            .filter(i => i)
-            .concat(Array(3).fill(""))
-            .slice(0, 3);
+        const options = (typeof req.query.options === "string" ? req.query.options.split("\uFFFE") : Array.isArray(req.query["poll-option"]) ? req.query["poll-option"] as string[] : [])
+            .filter(i => i);
+        if (options.length < 3)
+            for (let i = options.length; i < 2; ++i) options.push("");
+        if (options.length < MAX_POLL_OPTIONS) options.push("");
+        
         const pollOptionDivs = options.map(option => `
             <div class="poll-option">
                 <input type="text" name="poll-option" maxlength="${MAX_CHARACTER_LENGTH}" placeholder="Enter your option here" value="${xss(option)}">
@@ -185,13 +187,13 @@ export default function init(router: Router): void {
 
         displayPage(req, res, "index.html", {
             "BACKEND_BASE_PATH": (program.opts().backendBaseUrl || ""),
-            "FORM_SUBMISSION_ERROR": req.query.error,
+            "FORM_SUBMISSION_ERROR": xss(req.query.error + ""),
             "FORM_SUBMISSION_ERROR_SHOWN_CLASS": req.query.error ? "error-visible" : "",
-            "FORM_TITLE": req.query.title || "",
-            "FORM_DUPECHECK_IP": req.query.dupecheck === "ip" ? "selected" : "",
-            "FORM_DUPECHECK_COOKIE": req.query.dupecheck === "cookie" ? "selected" : "",
-            "FORM_DUPECHECK_NONE": req.query.dupecheck === "none" ? "selected" : "",
-            "FORM_MULTI_SELECT": req.query.multiselect === "true" ? "checked" : "",  
+            "FORM_TITLE": xss((req.query.title || req.query["poll-title"] || "") + ""),
+            "FORM_DUPECHECK_IP": req.query.dupecheck === "ip" || req.query["dupe-check"] === "ip" ? "selected" : "",
+            "FORM_DUPECHECK_COOKIE": req.query.dupecheck === "cookie" || req.query["dupe-check"] === "cookie" ? "selected" : "",
+            "FORM_DUPECHECK_NONE": req.query.dupecheck === "none" || req.query["dupe-check"] === "none" ? "selected" : "",
+            "FORM_MULTI_SELECT": req.query.multiselect === "true" || req.query["multi-select"] === "on" ? "checked" : "",  
             "FORM_CAPTCHA": req.query.captcha === "true" ? "checked" : "",
             "FORM_OPTION_DIVS": pollOptionDivs,
             "MAX_POLL_OPTIONS": MAX_POLL_OPTIONS,
