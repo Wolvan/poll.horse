@@ -70,8 +70,11 @@ export default async function init(router: Router, polls: Storage): Promise<void
         multiSelect: boolean,
         captcha: boolean
     }): Promise<Poll | string> {
-        if (!Array.isArray(pollData.options) || pollData.options.filter(i => i).length < 2)
-            return "Options must be an array and have at least 2 entries";
+        if (!Array.isArray(pollData.options) || pollData.options
+            .reduce((prev: string[], curr: string) => prev.concat(prev.includes(curr) ? "" : curr), [])
+            .filter(i => i).length < 2
+        )
+            return "Options must be an array and have at least 2 different entries";
         if (pollData.options.filter(i => i).length > MAX_POLL_OPTIONS)
             return "Only " + MAX_POLL_OPTIONS + " options are allowed";
 
