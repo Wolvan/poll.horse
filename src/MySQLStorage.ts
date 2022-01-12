@@ -26,8 +26,7 @@ export default class MySQLStorage extends Storage {
     async init(): Promise<this> {
         await this.#db.promise().query(`
             CREATE TABLE IF NOT EXISTS polls (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                id_str VARCHAR(32) NOT NULL UNIQUE,
+                id_str VARCHAR(32) NOT NULL PRIMARY KEY,
                 title VARCHAR(${MAX_CHARACTER_LENGTH}) NOT NULL DEFAULT '',
                 dupe_check_mode ENUM('none', 'ip', 'cookie') NOT NULL DEFAULT 'ip',
                 multi_select TINYINT(1) NOT NULL DEFAULT 0,
