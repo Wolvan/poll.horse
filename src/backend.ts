@@ -208,30 +208,6 @@ export default async function init(router: Router, polls: Storage): Promise<void
 
         return null;
     }
-    router.post("/vote/:id", async (req, res) => {
-        try {
-            const id = req.params.id;
-
-            const error = await voteOnPoll(id, req.body.votes, {
-                ip: req.headers["x-forwarded-for"] as string || req.socket.remoteAddress || "",
-                setCookie: res.cookie.bind(res),
-                cookies: req.cookies
-            });
-
-            if (error) res.status(error.statusCode).json({
-                error: error.error
-            });
-            else res.json({ status: "ok", id });
-        } catch (error) {
-            console.error(error);
-            if (error instanceof Error) res.status(500).json({
-                error: error.message
-            });
-            else res.status(500).json({
-                error: error
-            });
-        }
-    });
     router.post("/vote-form/:id", async (req, res) => {
         try {
             const id = req.params.id;
