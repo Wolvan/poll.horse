@@ -61,7 +61,15 @@ const defaultReplacements = {
         <li><a href="https://github.com/Wolvan/poll.horse" target="_blank">Github Repo</a></li>
         <li><a href="https://www.mppp.horse/" target="_blank">/mppp/ - Mass Production plushies</a></li>
         <li><a href="https://www.pon3.stream/" target="_blank">Pon3.Stream</a></li>
-    `
+    `,
+    "SYSTEM_VERSION": ((): string => {
+        try {
+            const packageJson = JSON.parse(fs.readFileSync(resolve(__dirname, "../package.json"), "utf8"));
+            return packageJson.version;
+        } catch (error) {
+            return "0.0.0";
+        }
+    })()
 };
 class Defaults2RenderTransform extends MinificationTransform {
     constructor(replacements = {}) {

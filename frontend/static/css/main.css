@@ -248,4 +248,8 @@ footer .copyright {
     color: #fff;
     padding: 5px;
 }
+footer .copyright a {
+    color: #fff;
+    text-decoration: none;
+}
 /* #endregion Footer */
