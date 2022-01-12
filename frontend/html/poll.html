@@ -36,6 +36,7 @@
         <section class="notepad">
             <div class="notepad-border"></div>
             <form action="{{ BACKEND_BASE_PATH }}/_backend/vote-form/{{ POLL_ID }}" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ CSRF_TOKEN }}">
                 <section class="poll-title">
                     {{ POLL_TITLE }}
                 </section>

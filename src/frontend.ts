@@ -7,6 +7,7 @@ import fetch from 'node-fetch';
 import { program } from "commander";
 import { FrontendPoll as Poll, PollResult } from "./Poll";
 import { MAX_CHARACTER_LENGTH, MAX_POLL_OPTIONS } from "./Config";
+import crypto from "crypto";
 
 const RenderBuffer = new WeakMap();
 const RenderReplacements = new WeakMap();
@@ -158,7 +159,13 @@ export default function init(router: Router): void {
                 </div>`
             ).join("");
 
+            const csrfToken = req.cookies.csrftoken || crypto.randomBytes(32).toString("base64");
+            res.cookie("csrftoken", csrfToken, {
+                httpOnly: true,
+            });
+
             await displayPage(req, res, "poll.html", {
+                "CSRF_TOKEN": csrfToken,
                 "POLL_ID": poll.id,
                 "POLL_TITLE": xss(poll.title),
                 "POLL_OPTION_DIVS": pollOptions,

@@ -4,6 +4,7 @@ import { CookieOptions, Router } from "express";
 import { BackendPoll as Poll, DupeCheckMode } from "./Poll";
 import { MAX_POLL_OPTIONS, MAX_CHARACTER_LENGTH } from "./Config";
 import Storage from "./Storage";
+import crypto from "crypto";
 
 function randomString(length = 10, charset = "abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789") {
     let result = "";
@@ -213,10 +214,23 @@ export default async function init(router: Router, polls: Storage): Promise<void
             const id = req.params.id;
             const votes = [].concat(req.body["poll-option"]);
 
+            const csrfTokenFromForm = req.body["csrf_token"];
+            const csrfTokenFromCookie = req.cookies.csrftoken;
+
+            if (csrfTokenFromForm !== csrfTokenFromCookie) return res.redirect(`/${id}?error=${
+                encodeURIComponent("Invalid CSRF token")
+            }&options=${
+                encodeURIComponent(votes.slice(0, MAX_POLL_OPTIONS).join("\uFFFE"))
+            }`);
+
             const error = await voteOnPoll(id, votes, {
                 ip: req.headers["x-forwarded-for"] as string || req.socket.remoteAddress || "",
                 setCookie: res.cookie.bind(res),
                 cookies: req.cookies
+            });
+
+            res.cookie("csrftoken", crypto.randomBytes(32).toString("base64"), {
+                httpOnly: true,
             });
 
             if (!error) return res.redirect("/" + id + "/r");
