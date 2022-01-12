@@ -60,8 +60,8 @@ function domLoaded() {
                     if (!el) return;
 
                     el.querySelector(".poll-option-votes").innerText = value;
-                    el.querySelector(".poll-bar-fill").style.width = (value / totalVotes * 100) + "%";
-                    el.querySelector(".poll-bar-text").innerText = Math.round(value / totalVotes * 100);
+                    el.querySelector(".poll-bar-fill").style.width = totalVotes ? (value / totalVotes * 100) + "%" : "0%";
+                    el.querySelector(".poll-bar-text").innerText = totalVotes ? Math.round(value / totalVotes * 100) : 0;
                 });
                 prevResult = votes;
             }
