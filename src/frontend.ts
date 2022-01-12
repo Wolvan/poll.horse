@@ -120,7 +120,7 @@ export default function init(router: Router): void {
         const id = req.params.id;
         try {
             const poll: PollResult = await fetch(
-                (program.opts().backendBaseUrl || "http://localhost:" + program.opts().port) + "/_backend/poll-result/" + id
+                (program.opts().backendBaseUrl || "http://localhost:" + program.opts().port) + "/_backend/api/poll-result/" + id
             ).then(r => r.json()) as PollResult;
             if (!poll || poll.error) return res.redirect("/");
             const totalVotes = Object.values(poll.votes).reduce((acc, cur) => acc + cur, 0);
@@ -155,7 +155,7 @@ export default function init(router: Router): void {
         const options = (typeof req.query.options === "string" ? req.query.options.split("\uFFFE") : []).filter(i => i);
         try {
             const poll: Poll = await fetch(
-                (program.opts().backendBaseUrl || "http://localhost:" + program.opts().port) + "/_backend/poll/" + id
+                (program.opts().backendBaseUrl || "http://localhost:" + program.opts().port) + "/_backend/api/poll/" + id
             ).then(r => r.json()) as Poll;
             if (!poll || poll.error) return res.redirect("/");
 

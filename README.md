@@ -5,6 +5,8 @@ With strawpoll being somewhat very broken I decided to implement my own. Let's g
 ## What is this
 If you have never used strawpoll, in short this is a website to easily make small polls without a fuss.
 
+## API
+This service offers an API to create and get the status of polls. The API Docs can be found [here](API.md).
 
 ## Contributing
 The core is written in TypeScript, a typed superset to Javascript and executed with NodeJS. Pull Requests welcome.

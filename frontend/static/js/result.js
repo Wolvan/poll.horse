@@ -48,7 +48,7 @@ function domLoaded() {
     let prevResult = null;
     async function fetchNewestResults() {
         try {
-            const response = await fetch(POLL_BACKEND_URL + "/_backend/poll-result/" + POLL_ID);
+            const response = await fetch(POLL_BACKEND_URL + "/_backend/api/poll-result/" + POLL_ID);
             const json = await response.json();
             if (json.error) throw new Error(json.error);
             const votes = json.votes;

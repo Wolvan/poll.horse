@@ -23,47 +23,7 @@ function unxss(str: string) {
         .replace(/&#039;/g, "'");
 }
 
-export default async function init(router: Router, polls: Storage): Promise<void> {    
-    router.get("/poll/:id", async (req, res) => {
-        try {
-            const id = req.params.id;
-            const poll: (Poll | undefined) = await polls.getItem(id);
-            if (!poll) return res.status(404).json({ error: "Poll not found" });
-            res.json(Object.assign({}, poll, {
-                options: Object.keys(poll.options),
-                dupeData: null
-            }));
-        } catch (error) {
-            console.error(error);
-            if (error instanceof Error) res.status(500).json({
-                error: error.message
-            });
-            else res.status(500).json({
-                error: error
-            });
-        }
-    });
-
-    router.get("/poll-result/:id", async (req, res) => {
-        try {
-            const id = req.params.id;
-            const poll: (Poll | undefined) = await polls.getItem(id);
-            if (!poll) return res.status(404).json({ error: "Poll not found" });
-            res.json({
-                title: poll.title,
-                votes: poll.options
-            });
-        } catch (error) {
-            console.error(error);
-            if (error instanceof Error) res.status(500).json({
-                error: error.message
-            });
-            else res.status(500).json({
-                error: error
-            });
-        }
-    });
-
+export default async function init(router: Router, polls: Storage): Promise<void> {
     async function createPoll(pollData: {
         title: string,
         options: string[],
@@ -109,66 +69,6 @@ export default async function init(router: Router, polls: Storage): Promise<void
         await polls.setItem(id, poll);
         return poll;
     }
-
-    router.post("/poll", async (req, res) => {
-        try {
-            const poll = await createPoll({
-                title: (req.body.title || "").trim().slice(0, MAX_CHARACTER_LENGTH),
-                options: req.body.options,
-                dupeCheckMode: req.body.dupeCheckMode,
-                multiSelect: req.body.multiSelect || false,
-                captcha: req.body.captcha || false,
-            });
-            if (typeof poll !== "string") res.json({
-                id: poll.id
-            });
-            else res.status(400).json({
-                error: poll
-            });
-        } catch (error) {
-            console.error(error);
-            if (error instanceof Error) res.status(500).json({
-                error: error.message
-            });
-            else res.status(500).json({
-                error: error
-            });
-        }
-    });
-    router.post("/poll-form", async (req, res) => {
-        try {
-            const poll = await createPoll({
-                title: (req.body["poll-title"] || "").trim().slice(0, MAX_CHARACTER_LENGTH),
-                options: req.body["poll-option"],
-                dupeCheckMode: req.body["dupe-check"],
-                multiSelect: req.body["multi-select"] === "on",
-                captcha: req.body["captcha"] === "on",
-            });
-            if (typeof poll !== "string") res.redirect("/" + poll.id);
-            else res.redirect(`/?error=${
-                encodeURIComponent(poll)
-            }&title=${
-                encodeURIComponent(req.body["poll-title"])
-            }&options=${
-                encodeURIComponent((req.body["poll-option"] || []).slice(0, MAX_POLL_OPTIONS).join("\uFFFE"))
-            }&dupecheck=${
-                encodeURIComponent(req.body["dupe-check"])
-            }&multiselect=${
-                req.body["multi-select"] === "on"
-            }&captcha=${
-                req.body["captcha"] === "on"
-            }`);
-        } catch (error) {
-            console.error(error);
-            if (error instanceof Error) res.status(500).json({
-                error: error.message
-            });
-            else res.status(500).json({
-                error: error
-            });
-        }
-    });
-
     async function voteOnPoll(pollId: string, votes: string[], { ip, setCookie, cookies }: {
         ip: string,
         setCookie: (name: string, value: string, options?: CookieOptions) => void,
@@ -209,6 +109,106 @@ export default async function init(router: Router, polls: Storage): Promise<void
 
         return null;
     }
+
+    // #region API
+    router.get("/api/poll/:id", async (req, res) => {
+        try {
+            const id = req.params.id;
+            const poll: (Poll | undefined) = await polls.getItem(id);
+            if (!poll) return res.status(404).json({ error: "Poll not found" });
+            res.json(Object.assign({}, poll, {
+                options: Object.keys(poll.options),
+                dupeData: null
+            }));
+        } catch (error) {
+            console.error(error);
+            if (error instanceof Error) res.status(500).json({
+                error: error.message
+            });
+            else res.status(500).json({
+                error: error
+            });
+        }
+    });
+    router.get("/api/poll-result/:id", async (req, res) => {
+        try {
+            const id = req.params.id;
+            const poll: (Poll | undefined) = await polls.getItem(id);
+            if (!poll) return res.status(404).json({ error: "Poll not found" });
+            res.json({
+                title: poll.title,
+                votes: poll.options
+            });
+        } catch (error) {
+            console.error(error);
+            if (error instanceof Error) res.status(500).json({
+                error: error.message
+            });
+            else res.status(500).json({
+                error: error
+            });
+        }
+    });
+    router.post("/api/poll", async (req, res) => {
+        try {
+            const poll = await createPoll({
+                title: (req.body.title || "").trim().slice(0, MAX_CHARACTER_LENGTH),
+                options: req.body.options,
+                dupeCheckMode: req.body.dupeCheckMode,
+                multiSelect: req.body.multiSelect || false,
+                captcha: req.body.captcha || false,
+            });
+            if (typeof poll !== "string") res.json({
+                id: poll.id
+            });
+            else res.status(400).json({
+                error: poll
+            });
+        } catch (error) {
+            console.error(error);
+            if (error instanceof Error) res.status(500).json({
+                error: error.message
+            });
+            else res.status(500).json({
+                error: error
+            });
+        }
+    });
+    // #endregion API
+    // #region Website Form Endpoints
+    router.post("/poll-form", async (req, res) => {
+        try {
+            const poll = await createPoll({
+                title: (req.body["poll-title"] || "").trim().slice(0, MAX_CHARACTER_LENGTH),
+                options: req.body["poll-option"],
+                dupeCheckMode: req.body["dupe-check"],
+                multiSelect: req.body["multi-select"] === "on",
+                captcha: req.body["captcha"] === "on",
+            });
+            if (typeof poll !== "string") res.redirect("/" + poll.id);
+            else res.redirect(`/?error=${
+                encodeURIComponent(poll)
+            }&title=${
+                encodeURIComponent(req.body["poll-title"])
+            }&options=${
+                encodeURIComponent((req.body["poll-option"] || []).slice(0, MAX_POLL_OPTIONS).join("\uFFFE"))
+            }&dupecheck=${
+                encodeURIComponent(req.body["dupe-check"])
+            }&multiselect=${
+                req.body["multi-select"] === "on"
+            }&captcha=${
+                req.body["captcha"] === "on"
+            }`);
+        } catch (error) {
+            console.error(error);
+            if (error instanceof Error) res.status(500).json({
+                error: error.message
+            });
+            else res.status(500).json({
+                error: error
+            });
+        }
+    });
     router.post("/vote-form/:id", async (req, res) => {
         try {
             const id = req.params.id;
@@ -250,4 +250,5 @@ export default async function init(router: Router, polls: Storage): Promise<void
             });
         }
     });
+    // #endregion Website Form Endpoints
 }
