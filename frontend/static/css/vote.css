@@ -1,0 +1,7 @@
+aside#qrcode {
+    position: absolute;
+    top: 0px;
+    right: -210px;
+    width: 200px;
+    height: 200px;
+}

@@ -67,8 +67,19 @@ aside#chart {
     visibility: hidden;
 }
 
+aside#qrcode {
+    position: absolute;
+    top: 210px;
+    right: -210px;
+    width: 200px;
+    height: 200px;
+}
+
 @media screen and (max-width: 750px) {
     aside#chart {
+        visibility: hidden !important;
+    }
+    aside#qrcode {
         visibility: hidden !important;
     }
 }

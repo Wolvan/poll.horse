@@ -143,7 +143,8 @@ export default function init(router: Router): void {
                 "POLL_OPTION_DIVS": pollOptionsDivs,
                 "POLL_VOTES_TOTAL": totalVotes,
                 "BACKEND_BASE_PATH": (program.opts().backendBaseUrl || ""),
-                "POLL_OPTION_VOTES": Buffer.from(JSON.stringify(Object.entries(poll.votes))).toString("base64")
+                "POLL_OPTION_VOTES": Buffer.from(JSON.stringify(Object.entries(poll.votes))).toString("base64"),
+                "QR_CODE": `https://chart.googleapis.com/chart?cht=qr&chs=190x190&chld=L|1&chl=${ encodeURIComponent(`${ req.protocol }://${ req.headers.host }/${ id }`) }`,
             });
         } catch (error) {
             console.log(error);
@@ -180,6 +181,7 @@ export default function init(router: Router): void {
                 "BACKEND_BASE_PATH": (program.opts().backendBaseUrl || ""),
                 "FORM_SUBMISSION_ERROR": xss(req.query.error + ""),
                 "FORM_SUBMISSION_ERROR_SHOWN_CLASS": req.query.error ? "error-visible" : "",
+                "QR_CODE": `https://chart.googleapis.com/chart?cht=qr&chs=190x190&chld=L|1&chl=${ encodeURIComponent(`${ req.protocol }://${ req.headers.host }/${ id }`) }`,
             });
         } catch (error) {
             console.log(error);
