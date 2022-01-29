@@ -124,7 +124,7 @@ export default function init(router: Router): void {
             ).then(r => r.json()) as PollResult;
             if (!poll || poll.error) return res.redirect("/");
             const totalVotes = Object.values(poll.votes).reduce((acc, cur) => acc + cur, 0);
-            const pollOptionsDivs = Object.entries(poll.votes).map(([option, votes]) => `
+            const pollOptionsDivs = Object.entries(poll.votes).sort((a, b) => b[1] - a[1]).map(([option, votes]) => `
                 <div class="poll-option" option="${ xss(option) }">
                     <div class="poll-option-info">
                         <div class="poll-option-text">${ xss(option) }</div><div class="poll-option-votes">${ votes }</div>
