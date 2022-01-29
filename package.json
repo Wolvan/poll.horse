@@ -1,6 +1,6 @@
 {
   "name": "poll-horse",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Make polls to vote on easily",
   "main": "dist/main.js",
   "types": "dist/main.d.ts",

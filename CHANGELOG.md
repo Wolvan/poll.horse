@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.0.4 (2022-01-29)
+### Additions
++ Votes on the result pages are now sorted by the amount of votes on load - 2f40091c
+
 ## v1.0.3 (2022-01-12)
 ### Additions
 + Increase difficulty for bots to automatically vote - ab151cb7
