@@ -24,6 +24,7 @@ async function main(): Promise<void> {
         ["--mysql-user <user>", "MySQL user", "root"],
         ["--mysql-password <password>", "MySQL password", "root"],
         ["--mysql-database <database>", "MySQL database", "polls"],
+        ["--mysql-table-prefix <prefix>", "MySQL table prefix", ""],
         ["--mysql-ssl", "Use SSL for MySQL connection"],
         ["--backend-base-url <url>", "Base URL for the backend server", null],
     ], ".poll-horse-config");
@@ -56,7 +57,8 @@ async function main(): Promise<void> {
             user: opts.mysqlUser,
             password: opts.mysqlPassword,
             database: opts.mysqlDatabase,
-            ssl: opts.mysqlSsl
+            ssl: opts.mysqlSsl,
+            tablePrefix: opts.mysqlTablePrefix,
         }) :
         new FlatFileStorage({ dir: resolve(process.cwd(), program.opts().dataDirectory) });
     await storage.init();
