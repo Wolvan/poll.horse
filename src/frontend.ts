@@ -69,7 +69,18 @@ const defaultReplacements = {
         } catch (error) {
             return "0.0.0";
         }
-    })()
+    })(),
+    "GIT_URL": ((): string => {
+        try {
+            if (process.env.HEROKU_SLUG_COMMIT) {
+                return `<a href="https://github.com/Wolvan/poll.horse/commit/${ process.env.HEROKU_SLUG_COMMIT }">git~${ process.env.HEROKU_SLUG_COMMIT.substring(0, 8) }</a>`;
+            }
+            const packageJson = JSON.parse(fs.readFileSync(resolve(__dirname, "../package.json"), "utf8"));
+            return `<a href="https://github.com/Wolvan/poll.horse/releases/tag/v${ packageJson.version }">v${ packageJson.version }</a>`;
+        } catch (error) {
+            return "v0.0.0";
+        }
+    })(),
 };
 class Defaults2RenderTransform extends MinificationTransform {
     constructor(replacements = {}) {
