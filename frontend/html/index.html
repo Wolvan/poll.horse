@@ -4,6 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ TITLE }}</title>
+    
+    <meta name="description" content="Simple, free and open source way to host polls for people to vote on. Create your own polls and share them with others!">
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="{{ TITLE }}" />
+    <meta property="og:description" content="Simple, free and open source way to host polls for people to vote on. Create your own polls and share them with others!" />
+    <meta property="og:url" content="{{ CANONICAL_HOST }}" />
+    <meta property="og:image" content="" />
+    <meta property="og:site_name" content="Poll.Horse" />
+    <meta content="#FFD756" data-react-helmet="true" name="theme-color" />
+    
+    <link rel="canonical" href="{{ CANONICAL_HOST }}" />
+    <meta name=”robots” content=”index,nofollow”>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;700&display=swap" rel="stylesheet">
@@ -18,7 +31,7 @@
 <body>
     <header>
         <h1>Poll.horse</h1>
-        <h3>Make voting on things simpler</h3>
+        <h2>Make voting on things simpler</h2>
     </header>
     <main>
         <section class="error {{ FORM_SUBMISSION_ERROR_SHOWN_CLASS }}">

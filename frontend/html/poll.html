@@ -4,6 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ TITLE }}</title>
+    
+    <meta name="description" content="{{ POLL_META_DESCRIPTION }}">
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="{{ TITLE }}" />
+    <meta property="og:description" content="{{ POLL_META_DESCRIPTION }}" />
+    <meta property="og:url" content="{{ CANONICAL_HOST }}" />
+    <meta property="og:image" content="" />
+    <meta property="og:site_name" content="Poll.Horse" />
+    <meta content="#FFD756" data-react-helmet="true" name="theme-color" />
+
+    <link rel="canonical" href="{{ CANONICAL_HOST }}" />
+    <meta name=”robots” content=”noindex,nofollow”>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;700&display=swap" rel="stylesheet">
@@ -27,7 +40,7 @@
 <body>
     <header>
         <h1><a href="/">Poll.horse</a></h1>
-        <h3>Make voting on things simpler</h3>
+        <h2>Make voting on things simpler</h2>
     </header>
     <main>
         <section class="error {{ FORM_SUBMISSION_ERROR_SHOWN_CLASS }}">
@@ -49,7 +62,7 @@
                     <a href="/{{ POLL_ID }}/r"><button type="button">Results</button></a>
                 </section>
             </form>
-            <aside id="qrcode"><img src="{{ QR_CODE }}"></aside>
+            <aside id="qrcode"><img alt="QR Code to voting page" src="{{ QR_CODE }}"></aside>
         </section>
     </main>
     <footer>

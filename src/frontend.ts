@@ -58,9 +58,9 @@ const defaultReplacements = {
     "DEVELOPER_CONTACT_INFO": "developer@poll.horse",
     "FOOTER_COPYRIGHT": `© ${ (new Date()).getFullYear() } Based Department`,
     "FOOTER_LINKS": `
-        <li><a href="https://github.com/Wolvan/poll.horse" target="_blank">Github Repo</a></li>
-        <li><a href="https://www.mppp.horse/" target="_blank">/mppp/ - Mass Production plushies</a></li>
-        <li><a href="https://www.pon3.stream/" target="_blank">Pon3.Stream</a></li>
+        <li><a href="https://github.com/Wolvan/poll.horse" target="_blank" rel="noreferrer">Github Repo</a></li>
+        <li><a href="https://www.mppp.horse/" target="_blank" rel="noreferrer">/mppp/ - Mass Production plushies</a></li>
+        <li><a href="https://www.pon3.stream/" target="_blank" rel="noreferrer">Pon3.Stream</a></li>
     `,
     "SYSTEM_VERSION": ((): string => {
         try {
@@ -149,6 +149,8 @@ export default function init(router: Router): void {
                 "BACKEND_BASE_PATH": (program.opts().backendBaseUrl || ""),
                 "POLL_OPTION_VOTES": Buffer.from(JSON.stringify(Object.entries(poll.votes))).toString("base64"),
                 "QR_CODE": `https://chart.googleapis.com/chart?cht=qr&chs=190x190&chld=L|1&chl=${ encodeURIComponent(`${ req.protocol }://${ req.headers.host }/${ id }`) }`,
+                "CANONICAL_HOST": req.protocol + "://" + (req.headers.host || "") + "/" + id + "/r",
+                "POLL_META_DESCRIPTION": xss(poll.title || "Simple, free and open source way to host polls for people to vote on. Create your own polls and share them with others!").substring(0, 150),
                 "CORS_SCRIPT_NONCE": res.locals.cspNonce
             });
         } catch (error) {
@@ -187,6 +189,8 @@ export default function init(router: Router): void {
                 "FORM_SUBMISSION_ERROR": xss(req.query.error + ""),
                 "FORM_SUBMISSION_ERROR_SHOWN_CLASS": req.query.error ? "error-visible" : "",
                 "QR_CODE": `https://chart.googleapis.com/chart?cht=qr&chs=190x190&chld=L|1&chl=${ encodeURIComponent(`${ req.protocol }://${ req.headers.host }/${ id }`) }`,
+                "CANONICAL_HOST": req.protocol + "://" + (req.headers.host || "") + "/" + id,
+                "POLL_META_DESCRIPTION": xss(poll.title || "Simple, free and open source way to host polls for people to vote on. Create your own polls and share them with others!").substring(0, 150),
                 "CORS_SCRIPT_NONCE": res.locals.cspNonce
             });
         } catch (error) {
@@ -221,6 +225,7 @@ export default function init(router: Router): void {
             "FORM_OPTION_DIVS": pollOptionDivs,
             "MAX_POLL_OPTIONS": MAX_POLL_OPTIONS,
             "MAX_CHARACTER_LENGTH": MAX_CHARACTER_LENGTH,
+            "CANONICAL_HOST": req.protocol + "://" + (req.headers.host || ""),
             "CORS_SCRIPT_NONCE": res.locals.cspNonce
         });
     });

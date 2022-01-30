@@ -78,6 +78,11 @@ async function main(): Promise<void> {
         await frontend.default(frontendRouter);
 
         app.use("/static", express.static(resolve(__dirname, "../frontend/static")));
+        app.get("/robots.txt", (req, res) => res.send(`
+            User-Agent: *
+            Allow: /$
+            Disallow: /
+        `));
         app.use("/", frontendRouter);
     }
 
