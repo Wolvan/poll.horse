@@ -5,6 +5,9 @@ With strawpoll being somewhat very broken I decided to implement my own. Let's g
 ## What is this
 If you have never used strawpoll, in short this is a website to easily make small polls without a fuss.
 
+A live version is available [here](https://poll.horse/). This version is always based on the current `master` branch and release tags.<br>
+You want more cutting edge? Under [dev.poll.horse](https://dev.poll.horse/) you can find the most recent builds based on the current commit of the `dev` branch. New features can be tested here but the integrity of the database is not guaranteed and may be occasionally wiped.
+
 ## API
 This service offers an API to create and get the status of polls. The API Docs can be found [here](API.md).
 
