@@ -13,7 +13,7 @@
     "debug": "ts-node-dev --inspect --respawn --clear ./src/main.ts",
     "start:build": "npm test && npm run build && node ./dist/main.js",
     "start": "node ./dist/main.js",
-    "heroku": "npm run start -- --port env:PORT --use-mysql --mysql-host env:MYSQL_HOST --mysql-port env:MYSQL_PORT --mysql-user env:MYSQL_USER --mysql-password env:MYSQL_PASSWORD --mysql-database env:MYSQL_DATABASE",
+    "heroku": "npm run start -- --port env:PORT --use-mysql --mysql-host env:MYSQL_HOST --mysql-port env:MYSQL_PORT --mysql-user env:MYSQL_USER --mysql-password env:MYSQL_PASSWORD --mysql-database env:MYSQL_DATABASE --mysql-table-prefix env:MYSQL_TABLE_PREFIX",
     "prepublish": "npm test && npm run build"
   },
   "repository": {
