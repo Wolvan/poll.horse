@@ -2,13 +2,15 @@
 "use strict";
 import loadConfig from "./config-loader";
 import { program } from "commander";
-import express from "express";
+import express, { Response } from "express";
 import compression from "compression";
 import cookiepaser from "cookie-parser";
 import { resolve } from "path";
 import FlatFileStorage from "./FlatFileStorage";
 import Storage from "./Storage";
 import MySQLStorage from "./MySQLStorage";
+import helmet from "helmet";
+import crypto from "crypto";
 
 async function main(): Promise<void> {
     await loadConfig([
@@ -32,6 +34,20 @@ async function main(): Promise<void> {
     app.use(express.urlencoded({ extended: false }));
     app.use(compression());
     app.use(cookiepaser());
+    app.use((req, res, next) => {
+        res.locals.cspNonce = crypto.randomBytes(16).toString("hex");
+        next();
+    });
+    app.use(helmet({
+        contentSecurityPolicy: {
+            directives: {
+                defaultSrc: ["'self'"],
+                scriptSrc: ["'self'", "'unsafe-inline'", "'strict-dynamic'", "https: 'self'", "http: 'self'", (req, res) => `'nonce-${(res as Response).locals.cspNonce}'`],
+                imgSrc: ["'self'", "data:", "https://chart.googleapis.com"],
+            }
+        },
+        crossOriginEmbedderPolicy: false
+    }));
 
     const storage: Storage = (opts.useMysql) ?
         new MySQLStorage({

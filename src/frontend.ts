@@ -116,6 +116,10 @@ function xss(unsafe: string) {
 }
 
 export default function init(router: Router): void {
+    router.all("*", (req, res, next) => {
+        res.header("Content-Type", "text/html; charset=utf-8");
+        next();
+    });
     router.get("/:id/r", async (req, res) => {
         const id = req.params.id;
         try {
@@ -145,6 +149,7 @@ export default function init(router: Router): void {
                 "BACKEND_BASE_PATH": (program.opts().backendBaseUrl || ""),
                 "POLL_OPTION_VOTES": Buffer.from(JSON.stringify(Object.entries(poll.votes))).toString("base64"),
                 "QR_CODE": `https://chart.googleapis.com/chart?cht=qr&chs=190x190&chld=L|1&chl=${ encodeURIComponent(`${ req.protocol }://${ req.headers.host }/${ id }`) }`,
+                "CORS_SCRIPT_NONCE": res.locals.cspNonce
             });
         } catch (error) {
             console.log(error);
@@ -182,6 +187,7 @@ export default function init(router: Router): void {
                 "FORM_SUBMISSION_ERROR": xss(req.query.error + ""),
                 "FORM_SUBMISSION_ERROR_SHOWN_CLASS": req.query.error ? "error-visible" : "",
                 "QR_CODE": `https://chart.googleapis.com/chart?cht=qr&chs=190x190&chld=L|1&chl=${ encodeURIComponent(`${ req.protocol }://${ req.headers.host }/${ id }`) }`,
+                "CORS_SCRIPT_NONCE": res.locals.cspNonce
             });
         } catch (error) {
             console.log(error);
@@ -214,7 +220,8 @@ export default function init(router: Router): void {
             "FORM_CAPTCHA": req.query.captcha === "true" ? "checked" : "",
             "FORM_OPTION_DIVS": pollOptionDivs,
             "MAX_POLL_OPTIONS": MAX_POLL_OPTIONS,
-            "MAX_CHARACTER_LENGTH": MAX_CHARACTER_LENGTH
+            "MAX_CHARACTER_LENGTH": MAX_CHARACTER_LENGTH,
+            "CORS_SCRIPT_NONCE": res.locals.cspNonce
         });
     });
 }

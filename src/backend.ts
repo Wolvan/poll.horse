@@ -110,6 +110,10 @@ export default async function init(router: Router, polls: Storage): Promise<void
         return null;
     }
 
+    router.all("*", (req, res, next) => {
+        res.header("Content-Type", "application/json; charset=utf-8");
+        next();
+    });
     // #region API
     router.get("/api/poll/:id", async (req, res) => {
         try {

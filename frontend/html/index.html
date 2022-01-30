@@ -9,11 +9,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/main.css">
     <link rel="stylesheet" href="/static/css/index.css">
-    <script type="text/javascript">
+    <script nonce="{{ CORS_SCRIPT_NONCE }}" type="text/javascript">
         const MAX_POLL_OPTIONS = "{{ MAX_POLL_OPTIONS }}";
         const MAX_CHARACTER_LENGTH = "{{ MAX_CHARACTER_LENGTH }}";
     </script>
-    <script type="text/javascript" src="/static/js/index.js" defer="true" async="true"></script>
+    <script nonce="{{ CORS_SCRIPT_NONCE }}" type="text/javascript" src="/static/js/index.js" defer="true" async="true"></script>
 </head>
 <body>
     <header>
