@@ -28,7 +28,7 @@ function domLoaded() {
         drawChart = data => {
             chart.draw(
                 google.visualization.arrayToDataTable(
-                    [["Options", "Votes"]].concat(data)
+                    [["Options", "Votes"]].concat(data.sort((a, b) => b[1] - a[1]))
                 ), chartOptions
             );
             chartEl.style.visibility = "visible";
