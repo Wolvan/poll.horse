@@ -162,7 +162,8 @@ export default function init(router: Router): void {
                 "QR_CODE": `https://chart.googleapis.com/chart?cht=qr&chs=190x190&chld=L|1&chl=${ encodeURIComponent(`${ req.protocol }://${ req.headers.host }/${ id }`) }`,
                 "CANONICAL_HOST": req.protocol + "://" + (req.headers.host || "") + "/" + id + "/r",
                 "POLL_META_DESCRIPTION": xss(poll.title || "Simple, free and open source way to host polls for people to vote on. Create your own polls and share them with others!").substring(0, 150),
-                "CORS_SCRIPT_NONCE": res.locals.cspNonce
+                "CORS_SCRIPT_NONCE": res.locals.cspNonce,
+                "HOST": req.protocol + "://" + (req.headers.host || "")
             });
         } catch (error) {
             console.log(error);
@@ -202,7 +203,8 @@ export default function init(router: Router): void {
                 "QR_CODE": `https://chart.googleapis.com/chart?cht=qr&chs=190x190&chld=L|1&chl=${ encodeURIComponent(`${ req.protocol }://${ req.headers.host }/${ id }`) }`,
                 "CANONICAL_HOST": req.protocol + "://" + (req.headers.host || "") + "/" + id,
                 "POLL_META_DESCRIPTION": xss(poll.title || "Simple, free and open source way to host polls for people to vote on. Create your own polls and share them with others!").substring(0, 150),
-                "CORS_SCRIPT_NONCE": res.locals.cspNonce
+                "CORS_SCRIPT_NONCE": res.locals.cspNonce,
+                "HOST": req.protocol + "://" + (req.headers.host || "")
             });
         } catch (error) {
             console.log(error);
@@ -237,7 +239,8 @@ export default function init(router: Router): void {
             "MAX_POLL_OPTIONS": MAX_POLL_OPTIONS,
             "MAX_CHARACTER_LENGTH": MAX_CHARACTER_LENGTH,
             "CANONICAL_HOST": req.protocol + "://" + (req.headers.host || ""),
-            "CORS_SCRIPT_NONCE": res.locals.cspNonce
+            "CORS_SCRIPT_NONCE": res.locals.cspNonce,
+            "HOST": req.protocol + "://" + (req.headers.host || "")
         });
     });
 }

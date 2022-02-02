@@ -117,3 +117,6 @@ data/
 # Config files
 config*.js*
 !config.example.json
+
+# Favicons that are being auto-generated
+frontend/favicons/

@@ -11,6 +11,8 @@ import Storage from "./Storage";
 import MySQLStorage from "./MySQLStorage";
 import helmet from "helmet";
 import crypto from "crypto";
+import { statSync } from "fs";
+import serveFavicon from "serve-favicon";
 
 async function main(): Promise<void> {
     await loadConfig([
@@ -31,6 +33,16 @@ async function main(): Promise<void> {
     const opts = program.opts();
 
     const app = express();
+
+    try {
+        if (statSync(resolve(__dirname, "../frontend/favicons")).isDirectory()) {
+            app.use("/favicons", express.static(resolve(__dirname, "../frontend/favicons")));
+            if (statSync(resolve(__dirname, "../frontend/favicons/favicon.ico")).isFile()) app.use(serveFavicon(resolve(__dirname, "../frontend/favicons/favicon.ico")));
+        }
+    } catch (error) {
+        console.warn("FavIcons not available: ", error);
+    }
+
     app.use(express.json());
     app.use(express.urlencoded({ extended: false }));
     app.use(compression());

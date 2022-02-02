@@ -1,3 +1,4 @@
 dist/
 node_modules/
 utils/todo-finder.js
+utils/create-favicons.js

@@ -10,7 +10,7 @@
     <meta property="og:title" content="{{ TITLE }}" />
     <meta property="og:description" content="{{ POLL_META_DESCRIPTION }}" />
     <meta property="og:url" content="{{ CANONICAL_HOST }}" />
-    <meta property="og:image" content="" />
+    <meta property="og:image" content="{{ HOST }}/static/img/icon.png" />
     <meta property="og:site_name" content="Poll.Horse" />
     <meta content="#FFD756" data-react-helmet="true" name="theme-color" />
 
@@ -36,6 +36,9 @@
             document.querySelectorAll(".poll-option .text").forEach(element => textFit(element, textFitOptions));
         });
     </script>
+    <!-- FAVICON_MARKER -->
+    
+    <!-- /FAVICON_MARKER -->
 </head>
 <body>
     <header>

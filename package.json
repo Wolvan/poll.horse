@@ -8,7 +8,8 @@
     "find-todo": "node utils/todo-finder.js ./src && node utils/todo-finder.js ./frontend",
     "mocha": "mocha",
     "lint": "eslint .",
-    "build": "rimraf ./dist && tsc",
+    "build:favicons": "node utils/create-favicons",
+    "build": "rimraf ./dist  && npm run build:favicons && tsc",
     "test": "npm run lint && npm run find-todo && npm run mocha",
     "debug": "ts-node-dev --inspect --respawn --clear ./src/main.ts",
     "start:build": "npm test && npm run build && node ./dist/main.js",
@@ -46,6 +47,7 @@
     "@types/node": "^16.11.10",
     "@types/node-fetch": "^2.5.12",
     "@types/node-persist": "^3.1.2",
+    "@types/serve-favicon": "^2.5.3",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "@typescript-eslint/parser": "^5.4.0",
     "chai": "^4.3.4",
@@ -65,10 +67,12 @@
     "compression": "^1.7.4",
     "cookie-parser": "^1.4.6",
     "express": "^4.17.2",
+    "favicons": "^6.2.2",
     "fs-extra": "^10.0.0",
     "helmet": "^5.0.2",
     "mysql2": "^2.3.3",
     "node-fetch": "^2.6.6",
-    "node-persist": "^3.1.0"
+    "node-persist": "^3.1.0",
+    "serve-favicon": "^2.5.0"
   }
 }
