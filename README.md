@@ -42,3 +42,7 @@ This project makes use of the following components. Thanks a lot to the respecti
 
 - [textFit](https://github.com/STRML/textFit)
 - [Google Charts](https://developers.google.com/chart)
+
+## Special thanks
+- [Shydale](https://twitter.com/fshydale) for letting me use Checkbox as the mascot
+- [dotkwa](https://twitter.com/dotkwa) for drwaing the adorable icon I am using
