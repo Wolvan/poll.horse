@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.2.0 (2022-02-02)
+### Additions
++ Add favicon and embbed icon! Thanks to Shydale and dotkwa for helping me out! - [f68ff6db](https://github.com/Wolvan/poll.horse/commit/f68ff6db)
+
 ## v1.1.0 (2022-02-02)
 ### Additions
 + Add QR Code to page that leads straight to voting page - [26a42333](https://github.com/Wolvan/poll.horse/commit/26a42333)
