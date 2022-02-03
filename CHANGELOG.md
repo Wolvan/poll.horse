@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.3.0 (2022-02-03)
+### Additions
++ Dockerization! The project can now be built as a docker image and run - [d34c50c8](https://github.com/Wolvan/poll.horse/commit/d34c50c8)
+### Changes & Fixes
+* Updated icon to a new version delivered by dotkwa - [afe6da1a](https://github.com/Wolvan/poll.horse/commit/afe6da1a)
+* Updated README to explain how to self host - [8b6ccdcb](https://github.com/Wolvan/poll.horse/commit/8b6ccdcb)
+
 ## v1.2.0 (2022-02-02)
 ### Additions
 + Add favicon and embbed icon! Thanks to Shydale and dotkwa for helping me out! - [f68ff6db](https://github.com/Wolvan/poll.horse/commit/f68ff6db)
