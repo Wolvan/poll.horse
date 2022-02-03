@@ -11,6 +11,24 @@ You want more cutting edge? Under [dev.poll.horse](https://dev.poll.horse/) you 
 ## API
 This service offers an API to create and get the status of polls. The API Docs can be found [here](API.md).
 
+## Running your own instance of Poll.Horse
+### Standalone
+1. Make sure you have [Node](https://www.nodejs.org/) installed.
+2. Download the latest release source code from [the releases page](https://github.com/Wolvan/poll.horse/releases/);
+3. Extract the zip file anywhere
+4. Open a shell in in the directory you just extracted to and run `npm i`
+5. Run `npm run build` to build the project
+6. Start the server with `npm start`
+7. List all available options with `npm start -- --help` or use shell options with `npm start -- <options>`
+
+### Docker
+1. Install [Docker](https://www.docker.com/get-started)
+2. Download/clone the contents of this repository
+3. Open a shell in the directory and run `docker build -t poll.horse`
+4. Use `docker run poll.horse`
+5. Optionally mount config file at `/usr/src/app/config.json`
+6. Optionally mount persistent directory to `/data`
+
 ## Contributing
 The core is written in TypeScript, a typed superset to Javascript and executed with NodeJS. Pull Requests welcome.
 
