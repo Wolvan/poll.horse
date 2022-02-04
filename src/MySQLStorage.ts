@@ -7,7 +7,8 @@ import { BackendPoll as Poll } from "./Poll";
 
 export default class MySQLStorage extends Storage {
     #db: mysql.Connection;
-    #options: mysql.ConnectionOptions & { tablePrefix?: string };
+    #options: mysql.ConnectionOptions;
+    #tablePrefix: string;
     #createConnection(mysqlInstance?: mysql.Connection): void {
         if (!mysqlInstance) this.#db = mysql.createConnection(this.#options);
         this.#db.on("error", (err: mysql.QueryError) => {
@@ -17,6 +18,9 @@ export default class MySQLStorage extends Storage {
     
     constructor(options: mysql.ConnectionOptions & { tablePrefix?: string }) {
         super();
+        options = Object.assign({}, options);
+        this.#tablePrefix = options.tablePrefix || "";
+        delete options["tablePrefix"];
         this.#options = options;
         console.debug("Initiating MySQLStorage.");
         this.#db = mysql.createConnection(this.#options);
@@ -25,7 +29,7 @@ export default class MySQLStorage extends Storage {
 
     async init(): Promise<this> {
         await this.#db.promise().query(`
-            CREATE TABLE IF NOT EXISTS ${ this.#options.tablePrefix || "" }polls (
+            CREATE TABLE IF NOT EXISTS ${ this.#tablePrefix || "" }polls (
                 id_str VARCHAR(32) NOT NULL PRIMARY KEY,
                 title VARCHAR(${MAX_CHARACTER_LENGTH}) NOT NULL DEFAULT '',
                 dupe_check_mode ENUM('none', 'ip', 'cookie') NOT NULL DEFAULT 'ip',
@@ -38,11 +42,14 @@ export default class MySQLStorage extends Storage {
                 updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
             )  ENGINE=INNODB;
         `);
+        await this.#db.promise().query(`
+            ALTER TABLE ${ this.#tablePrefix || "" }polls CHANGE dupe_data dupe_data MEDIUMTEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+        `);
         return this;
     }
 
     async getItem(key: string): Promise<Poll|null> {
-        const [rows] = await this.#db.promise().execute(`SELECT * FROM ${ this.#options.tablePrefix || "" }polls WHERE id_str = ? AND deleted_at IS NULL;`, [key]);
+        const [rows] = await this.#db.promise().execute(`SELECT * FROM ${ this.#tablePrefix || "" }polls WHERE id_str = ? AND deleted_at IS NULL;`, [key]);
         if (!rows || !Array.isArray(rows) || !rows.length) return null;
         const row = rows[0] as {
             id_str: string,
@@ -68,7 +75,7 @@ export default class MySQLStorage extends Storage {
 
     async setItem(key: string, value: Poll): Promise<void> {
         await this.#db.promise().execute(`
-            INSERT INTO ${ this.#options.tablePrefix || "" }polls
+            INSERT INTO ${ this.#tablePrefix || "" }polls
                 (id_str, title, dupe_check_mode, multi_select, captcha, dupe_data, options, creation_time)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             ON DUPLICATE KEY UPDATE
