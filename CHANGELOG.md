@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.3.1 (2022-02-04)
+### Changes & Fixes
+* Fix failing to fetch poll from database due to duplication data field being too small - [8bf01551](https://github.com/Wolvan/poll.horse/commit/8bf01551)
+* Fix warning on startup due to invalid MySQL Option `tablePrefix` - [8bf01551](https://github.com/Wolvan/poll.horse/commit/8bf01551)
+
 ## v1.3.0 (2022-02-03)
 ### Additions
 + Dockerization! The project can now be built as a docker image and run - [d34c50c8](https://github.com/Wolvan/poll.horse/commit/d34c50c8)
