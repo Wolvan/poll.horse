@@ -120,3 +120,6 @@ config*.js*
 
 # Favicons that are being auto-generated
 frontend/favicons/
+
+# Releases
+releases/
