@@ -94,8 +94,9 @@ export default async function init(router: Router, polls: Storage): Promise<void
         };
 
         if (poll.dupeCheckMode === "ip") {
-            if (Array.isArray(poll.dupeData) && poll.dupeData.includes(ip as string)) return null;
-            if (Array.isArray(poll.dupeData)) poll.dupeData.push(ip as string);
+            const dupeIP = ip.split(/, ?/).shift() || "";
+            if (Array.isArray(poll.dupeData) && poll.dupeData.includes(dupeIP)) return null;
+            if (Array.isArray(poll.dupeData)) poll.dupeData.push(dupeIP);
         } else if (poll.dupeCheckMode === "cookie") {
             const cookie = cookies[poll.dupeData as string];
             if (cookie) return null;
