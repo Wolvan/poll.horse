@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.3.2 (2022-02-13)
+### Changes & Fixes
+* Fix IP duplication checking behind proxies - [c9ef0788](https://github.com/Wolvan/poll.horse/commit/c9ef0788)
+
 ## v1.3.1 (2022-02-04)
 ### Changes & Fixes
 * Fix failing to fetch poll from database due to duplication data field being too small - [8bf01551](https://github.com/Wolvan/poll.horse/commit/8bf01551)
