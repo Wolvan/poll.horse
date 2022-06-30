@@ -2,7 +2,7 @@
 
 ## v1.3.3 (2022-06-30)
 ### Changes & Fixes
-* Add Ko-Fi link to footer for people who want to support my server hosting
+* Add Ko-Fi link to footer for people who want to support my server hosting - [04ed4060](https://github.com/Wolvan/poll.horse/commit/04ed4060)
 
 ## v1.3.2 (2022-02-13)
 ### Changes & Fixes
