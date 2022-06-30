@@ -61,6 +61,7 @@ const defaultReplacements = {
         <li><a href="https://github.com/Wolvan/poll.horse" target="_blank" rel="noreferrer">Github Repo</a></li>
         <li><a href="https://www.mppp.horse/" target="_blank" rel="noreferrer">/mppp/ - Mass Production plushies</a></li>
         <li><a href="https://www.pon3.stream/" target="_blank" rel="noreferrer">Pon3.Stream</a></li>
+        <li><a href="https://ko-fi.com/wolvan" target="_blank" rel="noreferrer">Support me</a></li>
     `,
     "SYSTEM_VERSION": ((): string => {
         try {
