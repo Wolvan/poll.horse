@@ -1,4 +1,8 @@
 # Changelog
+## v1.3.4 (2025-07-20)
+### Changes & Fixes
+* Fix MYSQL Database size for OPTIONS column being too big - [51c42bd](https://github.com/Wolvan/poll.horse/commit/51c42bd)
+* Fix QR Code Generation - [ccf373d](https://github.com/Wolvan/poll.horse/commit/ccf373d)
 
 ## v1.3.3 (2022-06-30)
 ### Changes & Fixes
