@@ -15,7 +15,7 @@ export default class MySQLStorage extends Storage {
             if (err.fatal) this.#createConnection();
         });
     }
-    
+
     constructor(options: mysql.ConnectionOptions & { tablePrefix?: string }) {
         super();
         options = Object.assign({}, options);
@@ -37,7 +37,7 @@ export default class MySQLStorage extends Storage {
                 captcha TINYINT(1) NOT NULL DEFAULT 0,
                 creation_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 dupe_data VARCHAR(8000) DEFAULT '[]',
-                options VARCHAR(32000) NOT NULL DEFAULT '{}',
+                options VARCHAR(21845) NOT NULL DEFAULT '{}',
                 deleted_at DATETIME DEFAULT NULL,
                 updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
             )  ENGINE=INNODB;
