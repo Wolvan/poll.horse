@@ -13,7 +13,7 @@ jobs:
 
       # Install Node 16
       - name: Setup Node
-        uses: actions/setup-node@v3.3.0
+        uses: actions/setup-node@v3.5.1
         with:
           node-version: 16
           
@@ -46,7 +46,7 @@ jobs:
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
       -
         name: Build and push
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           push: true
           tags: wolvan/poll.horse:latest
