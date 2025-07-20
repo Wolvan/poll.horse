@@ -90,7 +90,7 @@ class Defaults2RenderTransform extends MinificationTransform {
 }
 async function displayPage(req: Request, res: Response, htmlFilename: string, replacements = {}, statusCode = 200) {
     const promisifyStream = (fn: Stream) => new Promise(pRes => fn.on("finish", pRes));
-    
+
     try {
         await fs.stat(resolve(__dirname, "../frontend/html", htmlFilename));
         await promisifyStream(
@@ -107,7 +107,7 @@ async function displayPage(req: Request, res: Response, htmlFilename: string, re
                     .pipe(res.status(404))
                 );
             } else {
-                await promisifyStream( 
+                await promisifyStream(
                     fs.createReadStream(resolve(__dirname, "../frontend/errors/500.html")).pipe(new Defaults2RenderTransform({
                         "JS_ERROR_STACK": (error as NodeError).stack,
                         "HTTP_ERROR_CODE": 500
@@ -160,7 +160,7 @@ export default function init(router: Router): void {
                 "POLL_VOTES_TOTAL": totalVotes,
                 "BACKEND_BASE_PATH": (program.opts().backendBaseUrl || ""),
                 "POLL_OPTION_VOTES": Buffer.from(JSON.stringify(Object.entries(poll.votes))).toString("base64"),
-                "QR_CODE": `https://chart.googleapis.com/chart?cht=qr&chs=190x190&chld=L|1&chl=${ encodeURIComponent(`${ req.protocol }://${ req.headers.host }/${ id }`) }`,
+                "QR_CODE": `https://api.qrserver.com/v1/create-qr-code/?size=190x190&ecc=L&margin=5&data=${ encodeURIComponent(`${ req.protocol }://${ req.headers.host }/${ id }`) }`,
                 "CANONICAL_HOST": req.protocol + "://" + (req.headers.host || "") + "/" + id + "/r",
                 "POLL_META_DESCRIPTION": xss(poll.title || "Simple, free and open source way to host polls for people to vote on. Create your own polls and share them with others!").substring(0, 150),
                 "CORS_SCRIPT_NONCE": res.locals.cspNonce,
@@ -201,7 +201,7 @@ export default function init(router: Router): void {
                 "BACKEND_BASE_PATH": (program.opts().backendBaseUrl || ""),
                 "FORM_SUBMISSION_ERROR": xss(req.query.error + ""),
                 "FORM_SUBMISSION_ERROR_SHOWN_CLASS": req.query.error ? "error-visible" : "",
-                "QR_CODE": `https://chart.googleapis.com/chart?cht=qr&chs=190x190&chld=L|1&chl=${ encodeURIComponent(`${ req.protocol }://${ req.headers.host }/${ id }`) }`,
+                "QR_CODE": `https://api.qrserver.com/v1/create-qr-code/?size=190x190&ecc=L&margin=5&data=${ encodeURIComponent(`${ req.protocol }://${ req.headers.host }/${ id }`) }`,
                 "CANONICAL_HOST": req.protocol + "://" + (req.headers.host || "") + "/" + id,
                 "POLL_META_DESCRIPTION": xss(poll.title || "Simple, free and open source way to host polls for people to vote on. Create your own polls and share them with others!").substring(0, 150),
                 "CORS_SCRIPT_NONCE": res.locals.cspNonce,
@@ -219,7 +219,7 @@ export default function init(router: Router): void {
         if (options.length < 3)
             for (let i = options.length; i < 2; ++i) options.push("");
         if (options.length < MAX_POLL_OPTIONS) options.push("");
-        
+
         const pollOptionDivs = options.map(option => `
             <div class="poll-option">
                 <input type="text" name="poll-option" maxlength="${MAX_CHARACTER_LENGTH}" placeholder="Enter your option here" value="${xss(option)}">
@@ -234,7 +234,7 @@ export default function init(router: Router): void {
             "FORM_DUPECHECK_IP": req.query.dupecheck === "ip" || req.query["dupe-check"] === "ip" ? "selected" : "",
             "FORM_DUPECHECK_COOKIE": req.query.dupecheck === "cookie" || req.query["dupe-check"] === "cookie" ? "selected" : "",
             "FORM_DUPECHECK_NONE": req.query.dupecheck === "none" || req.query["dupe-check"] === "none" ? "selected" : "",
-            "FORM_MULTI_SELECT": req.query.multiselect === "true" || req.query["multi-select"] === "on" ? "checked" : "",  
+            "FORM_MULTI_SELECT": req.query.multiselect === "true" || req.query["multi-select"] === "on" ? "checked" : "",
             "FORM_CAPTCHA": req.query.captcha === "true" ? "checked" : "",
             "FORM_OPTION_DIVS": pollOptionDivs,
             "MAX_POLL_OPTIONS": MAX_POLL_OPTIONS,

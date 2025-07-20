@@ -56,7 +56,7 @@ async function main(): Promise<void> {
             directives: {
                 defaultSrc: ["'self'"],
                 scriptSrc: ["'self'", "'unsafe-inline'", "'strict-dynamic'", "https: 'self'", "http: 'self'", (req, res) => `'nonce-${(res as Response).locals.cspNonce}'`],
-                imgSrc: ["'self'", "data:", "https://chart.googleapis.com"],
+                imgSrc: ["'self'", "data:", "https://api.qrserver.com"],
             }
         },
         crossOriginEmbedderPolicy: false
