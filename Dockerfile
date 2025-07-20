@@ -6,7 +6,7 @@ RUN apk add --update tini
 
 # Install and build application
 COPY ["package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./"]
-RUN npm set-script prepublish ""
+RUN npm pkg delete scripts.prepublish
 RUN npm install --silent && npm cache clean --silent --force
 COPY . .
 RUN npm test
